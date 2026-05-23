@@ -1,34 +1,67 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>راهنمای دانشجویان ورودی جدید</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انجمن نانو فناوری دانشگاه یزد</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
+<body>
 
-<body class="intro-page">
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="brand">
+                <span class="brand__title">انجمن نانو فناوری دانشگاه یزد</span>
+            </a>
+            <button class="nav-toggle" aria-label="منوی ناوبری" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav">
+                <a href="#rahnama">راهنمای دانشجویان</a>
+                <a href="#events">رویدادهای پیش رو</a>
+                <a href="#reports">فعالیت‌های انجام شده</a>
+                <a href="#contact">ارتباط با انجمن</a>
+            </nav>
+        </div>
+    </header>
 
-<div class="hero-container">
+    <main>
+        <section class="hero">
+            <div class="hero__content">
+                <h1 class="hero__title">انجمن نانو فناوری دانشگاه یزد</h1>
+                <p class="lead">به وب‌سایت رسمی انجمن نانو فناوری دانشگاه یزد خوش آمدید. ما اینجا هستیم تا با همکاری یکدیگر، مسیر پژوهش و یادگیری در حوزه فناوری‌های نانو را هموار کنیم.</p>
+            </div>
+        </section>
 
-<h1>به دانشگاه یزد خوش آمدید</h1>
+        <section class="container">
+            <div class="card-grid">
+                <a href="rahnama/index.html" class="card" id="rahnama">
+                    <h3 class="card__title">راهنمای دانشجویان</h3>
+                    <p class="card__desc">اطلاعات و منابع مورد نیاز دانشجویان</p>
+                </a>
 
-<p>
-این سامانه برای راهنمایی دانشجویان ورودی جدید طراحی شده تا
-در ابتدای ورود به دانشگاه با بخش‌های مختلف آشنا شوید.
-</p>
+                <a href="events/index.html" class="card" id="events">
+                    <h3 class="card__title">رویدادهای پیش رو</h3>
+                    <p class="card__desc">برنامه‌ها و رویدادهای آینده انجمن</p>
+                </a>
 
-<p class="credit">
-تهیه و تنظیم توسط
-<strong>انجمن علمی نانو فناوری دانشگاه یزد</strong>
-</p>
+                <a href="reports/index.html" class="card" id="reports">
+                    <h3 class="card__title">فعالیت‌های انجام شده در ترم گذشته</h3>
+                    <p class="card__desc">گزارش عملکرد و دستاوردهای ترم قبل</p>
+                </a>
 
-<a href="menu.html" class="btn-start guide-btn-box">ورود به راهنما</a>
+                <a href="contact/index.html" class="card" id="contact">
+                    <h3 class="card__title">ارتباط با انجمن</h3>
+                    <p class="card__desc">راه‌های تماس و ارتباط با ما</p>
+                </a>
+            </div>
+        </section>
+    </main>
 
+    <button class="scroll-top" aria-label="بازگشت به بالا">↑</button>
 
-</div>
-
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
-
