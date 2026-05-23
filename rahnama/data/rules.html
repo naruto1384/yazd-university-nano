@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قوانین خوابگاه</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* دکمه بازگشت کوچک‌تر */
+.back-btn {
+    width: 180px;
+    padding: 10px;
+    font-size: 15px;
+    margin: 25px auto;
+}
+
+/* Lightbox */
+#lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #000;
+    cursor: zoom-out;
+}
+
+.clickable-img {
+    cursor: zoom-in;
+    transition: 0.2s;
+}
+
+.clickable-img:hover {
+    transform: scale(1.02);
+}
+</style>
+
+</head>
+
+<body class="self-page">
+
+<h1 class="section-title">قوانین خوابگاه</h1>
+
+<div class="menu-grid">
+
+<div class="content-box always-open">
+
+<h3>ساعت حضور</h3>
+<p>
+ساعت حضور پسران در خوابگاه: <b>۱۱ شب</b><br>
+ساعت حضور بانوان در خوابگاه: <b>۹ شب</b><br>
+لطفاً در ساعات تعیین‌شده داخل خوابگاه باشید.
+</p>
+
+<h3>تجهیزات و کارهای ممنوعه</h3>
+<p>وسایل و کارهای ممنوعه به شرح زیر می‌باشند:</p>
+
+<ul style="line-height:2">
+<li>وسایل برقی با مصرف زیاد</li>
+<li>مشروبات الکلی و انواع مواد مخدر (از جمله سیگار)</li>
+<li>کمک به ورود افراد غیر عضو خوابگاه</li>
+<li>آتش روشن کردن در هر قسمت از خوابگاه</li>
+<li>آسیب رساندن به اتاق یا تجهیزات خوابگاه</li>
+</ul>
+
+<h3>ساعات حضور اتوبوس در ایستگاه</h3>
+
+<!-- تصویر قابل بزرگ‌نمایی -->
+<img src="images/5.jpg" 
+     class="clickable-img"
+     style="width:100%;max-width:800px;border-radius:10px;margin-top:10px">
+
+</div>
+
+<!-- دکمه بازگشت کوچک -->
+<div class="menu-item back-btn" onclick="location.href='dorm.html'">
+بازگشت به صفحه قبل
+</div>
+
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox">
+    <img src="">
+</div>
+
+<script>
+// Lightbox logic
+const img = document.querySelector(".clickable-img");
+const lightbox = document.getElementById("lightbox");
+const lightImg = lightbox.querySelector("img");
+
+img.onclick = () => {
+    lightImg.src = img.src;
+    lightbox.style.display = "flex";
+};
+
+lightbox.onclick = () => {
+    lightbox.style.display = "none";
+};
+</script>
+
+</body>
+</html>
