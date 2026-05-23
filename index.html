@@ -1,67 +1,113 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" class="rtl lang-fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>انجمن نانو فناوری دانشگاه یزد</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>انجمن نانو فناوری دانشگاه یزد</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
-    <header class="site-header">
-        <div class="header-inner">
-            <a href="/" class="brand">
-                <span class="brand__title">انجمن نانو فناوری دانشگاه یزد</span>
-            </a>
-            <button class="nav-toggle" aria-label="منوی ناوبری" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav class="nav">
-                <a href="#rahnama">راهنمای دانشجویان</a>
-                <a href="#events">رویدادهای پیش رو</a>
-                <a href="#reports">فعالیت‌های انجام شده</a>
-                <a href="#contact">ارتباط با انجمن</a>
-            </nav>
+  <a class="visually-hidden" href="#main-content">رفتن به محتوا</a>
+
+  <header class="site-header" role="banner">
+    <div class="header-inner container">
+      <a href="/" class="brand" aria-label="صفحه اصلی انجمن">
+        <img class="brand__logo" src="assets/images/brand-logo.png" alt="لوگوی انجمن" />
+        <span class="brand__text">
+          <span class="brand__title">انجمن نانو فناوری دانشگاه یزد</span>
+          <span class="brand__subtitle">پژوهش • آموزش • همکاری</span>
+        </span>
+      </a>
+
+      <button class="nav-toggle" aria-label="باز کردن منوی ناوبری" aria-expanded="false" aria-controls="primary-nav">
+        <span class="visually-hidden">منو</span>
+        <svg width="20" height="14" viewBox="0 0 20 14" aria-hidden="true" focusable="false">
+          <rect width="20" height="2" y="0" rx="1" fill="currentColor"></rect>
+          <rect width="20" height="2" y="6" rx="1" fill="currentColor"></rect>
+          <rect width="20" height="2" y="12" rx="1" fill="currentColor"></rect>
+        </svg>
+      </button>
+
+      <nav id="primary-nav" class="nav" role="navigation" aria-label="ناوبری اصلی">
+        <a href="#rahnama" role="link">راهنمای دانشجویان</a>
+        <a href="#events" role="link">رویدادهای پیش رو</a>
+        <a href="#reports" role="link">فعالیت‌های انجام شده</a>
+        <a href="#contact" role="link">ارتباط با انجمن</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" role="main">
+    <!-- Hero: مقدار --hero-bg را با مسیر تصویر هِرو خود ست کنید -->
+    <section class="hero" style="--hero-bg: url('assets/images/nanotech-hero.jpg');">
+      <!-- Badges: نشان انجمن و دانشگاه -->
+      <div class="hero-badges" aria-hidden="false">
+        <div class="hero-badge" role="img" aria-label="نشان انجمن نانو">
+          <img src="assets/images/nano-badge.png" alt="نشان انجمن نانو" />
+          <div class="hero-badge__text">
+            <span class="hero-badge__title">انجمن نانو</span>
+            <span class="hero-badge__sub">Nano Technology Society</span>
+          </div>
         </div>
-    </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero__content">
-                <h1 class="hero__title">انجمن نانو فناوری دانشگاه یزد</h1>
-                <p class="lead">به وب‌سایت رسمی انجمن نانو فناوری دانشگاه یزد خوش آمدید. ما اینجا هستیم تا با همکاری یکدیگر، مسیر پژوهش و یادگیری در حوزه فناوری‌های نانو را هموار کنیم.</p>
-            </div>
-        </section>
+        <div class="hero-badge" role="img" aria-label="لوگوی دانشگاه یزد">
+          <img src="assets/images/university-logo.png" alt="لوگوی دانشگاه یزد" />
+          <div class="hero-badge__text">
+            <span class="hero-badge__title">دانشگاه یزد</span>
+            <span class="hero-badge__sub">Faculty of Science</span>
+          </div>
+        </div>
+      </div>
 
-        <section class="container">
-            <div class="card-grid">
-                <a href="rahnama/index.html" class="card" id="rahnama">
-                    <h3 class="card__title">راهنمای دانشجویان</h3>
-                    <p class="card__desc">اطلاعات و منابع مورد نیاز دانشجویان</p>
-                </a>
+      <div class="hero__content reveal reveal--scale">
+        <h1 class="hero__title">انجمن نانو فناوری دانشگاه یزد</h1>
+        <p class="lead hero__subtitle">به وب‌سایت رسمی انجمن خوش آمدید. با هم مسیر پژوهش و یادگیری در حوزهٔ نانوفناوری را هموار می‌کنیم.</p>
 
-                <a href="events/index.html" class="card" id="events">
-                    <h3 class="card__title">رویدادهای پیش رو</h3>
-                    <p class="card__desc">برنامه‌ها و رویدادهای آینده انجمن</p>
-                </a>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#rahnama">شروع کنید</a>
+          <a class="btn btn--ghost" href="#events">رویدادها</a>
+        </div>
+      </div>
 
-                <a href="reports/index.html" class="card" id="reports">
-                    <h3 class="card__title">فعالیت‌های انجام شده در ترم گذشته</h3>
-                    <p class="card__desc">گزارش عملکرد و دستاوردهای ترم قبل</p>
-                </a>
+      <!-- کوچک‌ترین گالری تصویری مرتبط با نانوفناوری -->
+      <div class="hero-gallery" aria-hidden="true">
+        <div class="g-item"><img src="assets/images/nano1.jpg" alt="نمونه نانوفناوری ۱" loading="lazy" /></div>
+        <div class="g-item"><img src="assets/images/nano2.jpg" alt="نمونه نانوفناوری ۲" loading="lazy" /></div>
+        <div class="g-item"><img src="assets/images/nano3.jpg" alt="نمونه نانوفناوری ۳" loading="lazy" /></div>
+      </div>
 
-                <a href="contact/index.html" class="card" id="contact">
-                    <h3 class="card__title">ارتباط با انجمن</h3>
-                    <p class="card__desc">راه‌های تماس و ارتباط با ما</p>
-                </a>
-            </div>
-        </section>
-    </main>
+      <!-- دکور نانو (اختیاری: می‌توانید عناصر .glow-dot را با JS اضافه کنید) -->
+      <div class="nano-grid" aria-hidden="true"></div>
+    </section>
 
-    <button class="scroll-top" aria-label="بازگشت به بالا">↑</button>
+    <section class="container section">
+      <div class="card-grid">
+        <a href="rahnama/index.html" class="card" id="rahnama" aria-labelledby="rahnama-title">
+          <h3 id="rahnama-title" class="card__title">راهنمای دانشجویان</h3>
+          <p class="card__desc">اطلاعات و منابع مورد نیاز دانشجویان</p>
+        </a>
 
-    <script src="assets/js/main.js"></script>
+        <a href="events/index.html" class="card" id="events" aria-labelledby="events-title">
+          <h3 id="events-title" class="card__title">رویدادهای پیش رو</h3>
+          <p class="card__desc">برنامه‌ها و رویدادهای آینده انجمن</p>
+        </a>
+
+        <a href="reports/index.html" class="card" id="reports" aria-labelledby="reports-title">
+          <h3 id="reports-title" class="card__title">فعالیت‌های انجام شده در ترم گذشته</h3>
+          <p class="card__desc">گزارش عملکرد و دستاوردهای ترم قبل</p>
+        </a>
+
+        <a href="contact/index.html" class="card" id="contact" aria-labelledby="contact-title">
+          <h3 id="contact-title" class="card__title">ارتباط با انجمن</h3>
+          <p class="card__desc">راه‌های تماس و ارتباط با ما</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <button class="scroll-top" aria-label="بازگشت به بالا">↑</button>
+
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
