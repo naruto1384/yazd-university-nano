@@ -6,86 +6,119 @@
   <meta name="theme-color" content="#071226" />
   <title>ارتباط با انجمن | انجمن نانوفناوری دانشگاه یزد</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css" />
-  
-  <style>
-    /* استایل اختصاصی برای دکمه بازگشت */
-    .back-nav {
-      margin-bottom: 2rem;
-    }
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      transition: 0.3s;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .back-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-  </style>
 </head>
 
 <body>
 
-  <main class="container">
-    <!-- دکمه بازگشت -->
-    <nav class="back-nav">
-      <a href="../index.html" class="back-btn">← بازگشت به صفحه اصلی</a>
-    </nav>
+  <!-- دکمه تغییر تم -->
+  <button class="theme-toggle" aria-label="تغییر تم">
+    <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
+    <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+  </button>
 
-    <section class="section">
-      <h1 class="section-title">ارتباط با انجمن</h1>
-      <p class="lead">
-        برای پرسش‌وپاسخ، اطلاع از برنامه‌ها و هماهنگی‌های انجمن نانوفناوری دانشگاه یزد از مسیرهای زیر استفاده کنید:
-      </p>
-
-      <div class="quick-grid">
-
-        <!-- Telegram -->
-        <a class="quick-card" href="https://t.me/nano_yazduni" target="_blank" rel="noopener">
-          <div>
-            <h3 class="quick-card__title">تلگرام</h3>
-            <p class="quick-card__text">آیدی تلگرام: @nano_yazduni</p>
-          </div>
-        </a>
-
-        <!-- Eitaa -->
-        <a class="quick-card" href="https://eitaa.com/yazd_uni_nano" target="_blank" rel="noopener">
-          <div>
-            <h3 class="quick-card__title">ایتا</h3>
-            <p class="quick-card__text">آیدی ایتا: @yazd_uni_nano</p>
-          </div>
-        </a>
-
-        <!-- Secretary ID (copyable) -->
-        <div class="quick-card contact-card" role="group" aria-label="آیدی دبیر انجمن">
-          <div>
-            <h3 class="quick-card__title">دبیر انجمن</h3>
-            <p class="quick-card__text">آیدی دبیر در ایتا: @Mohsen_Khajeh_Aminian</p>
-
-            <button
-              class="btn btn--soft btn--sm copy-id"
-              type="button"
-              data-copy="@Mohsen_Khajeh_Aminian"
-            >
-              کپی آیدی دبیر
-            </button>
-
-            <p class="copy-feedback muted" aria-live="polite"></p>
-          </div>
+  <!-- هدر و ناوبری -->
+  <header class="site-header navbar">
+    <div class="container site-header__inner">
+      <a href="../index.html" class="brand navbar-brand">
+        <span class="brand__logo" aria-hidden="true">⚛️</span>
+        <div>
+          <span class="brand__title">انجمن نانو فناوری دانشگاه یزد</span>
         </div>
+      </a>
 
-      </div>
-    </section>
+      <button class="nav-toggle" aria-label="منوی ناوبری" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav">
+        <ul class="nav__list navbar-nav">
+          <li><a class="nav__link" href="../index.html#rahnama">راهنمای دانشجویان</a></li>
+          <li><a class="nav__link" href="../index.html#events">رویدادهای پیش رو</a></li>
+          <li><a class="nav__link" href="../index.html#reports">فعالیت‌های انجام شده</a></li>
+          <li><a class="nav__link" href="../index.html#gallery">گالری تصاویر</a></li>
+          <li><a class="nav__link active" href="index.html">ارتباط با انجمن</a></li>
+        </ul>
+        <a class="header-cta btn btn-primary" href="index.html">عضویت</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- دکمه بازگشت -->
+      <nav class="back-nav" aria-label="ناوبری بازگشت">
+        <a href="../index.html" class="btn btn-glass back-btn">
+          <span aria-hidden="true">←</span>
+          بازگشت به صفحه اصلی
+        </a>
+      </nav>
+
+      <section class="section">
+        <h1 class="section-title">ارتباط با انجمن</h1>
+        <p class="lead">
+          برای پرسش‌وپاسخ، اطلاع از برنامه‌ها و هماهنگی‌های انجمن نانوفناوری دانشگاه یزد از مسیرهای زیر استفاده کنید:
+        </p>
+
+        <div class="cards-grid quick-grid">
+
+          <!-- Telegram -->
+          <a class="card glass-card quick-card" href="https://t.me/nano_yazduni" target="_blank" rel="noopener">
+            <div>
+              <h3 class="card__title quick-card__title">تلگرام</h3>
+              <p class="card__desc quick-card__text">آیدی تلگرام: @nano_yazduni</p>
+            </div>
+          </a>
+
+          <!-- Eitaa -->
+          <a class="card glass-card quick-card" href="https://eitaa.com/yazd_uni_nano" target="_blank" rel="noopener">
+            <div>
+              <h3 class="card__title quick-card__title">ایتا</h3>
+              <p class="card__desc quick-card__text">آیدی ایتا: @yazd_uni_nano</p>
+            </div>
+          </a>
+
+          <!-- Secretary ID (copyable) -->
+          <div class="card glass-card quick-card contact-card" role="group" aria-label="آیدی دبیر انجمن">
+            <div>
+              <h3 class="card__title quick-card__title">دبیر انجمن</h3>
+              <p class="card__desc quick-card__text">آیدی دبیر در ایتا: @Mohsen_Khajeh_Aminian</p>
+
+              <button
+                class="btn btn-glass btn--sm copy-id"
+                type="button"
+                data-copy="@Mohsen_Khajeh_Aminian"
+              >
+                کپی آیدی دبیر
+              </button>
+
+              <p class="copy-feedback muted" aria-live="polite"></p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
   </main>
+
+  <!-- فوتر -->
+  <footer>
+    <div class="container">
+      <p>© ۱۴۰۵ انجمن نانو فناوری دانشگاه یزد — تمامی حقوق محفوظ است.</p>
+    </div>
+  </footer>
+
+  <!-- Toast اعلان -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- دکمه بازگشت به بالا -->
+  <button class="scroll-top" aria-label="بازگشت به بالا">↑</button>
 
   <script src="../assets/js/main.js"></script>
 </body>
