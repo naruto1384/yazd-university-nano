@@ -1,537 +1,537 @@
-/* ============================================================
-   NANO TECHNOLOGY SOCIETY — main.js
-   Companion script for style.css
-   ============================================================ */
+/* =========================================================
+   Project Main JS
+   Theme switcher + navigation + accordion + gallery + UI helpers
+   ========================================================= */
 
-;(function () {
-  'use strict'
+(() => {
+  'use strict';
 
-  /* ─── Utility Helpers ─── */
-  const $ = (sel, ctx = document) => ctx.querySelector(sel)
-  const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)]
+  /* =========================
+     Helpers
+     ========================= */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  function debounce(fn, ms = 150) {
-    let t
-    return (...args) => {
-      clearTimeout(t)
-      t = setTimeout(() => fn(...args), ms)
-    }
-  }
+  const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-  /* ─── DOM Ready ─── */
-  document.addEventListener('DOMContentLoaded', init)
+  const isMobile = () => window.matchMedia('(max-width: 900px)').matches;
 
-  function init() {
-    initNavToggle()
-    initStickyHeader()
-    initScrollReveal()
-    initScrollTop()
-    initTabs()
-    initAccordion()
-    initModal()
-    initCountUp()
-    initTooltips()
-    initLangSwitch()
-    initSmoothScroll()
-  }
+  const smoothScrollTo = (targetEl, offset = 80) => {
+    if (!targetEl) return;
+    const top = targetEl.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
 
-  /* ═══════════════════════════════════════════════════════════
-     1. Mobile Navigation Toggle
-     ═══════════════════════════════════════════════════════════ */
-  function initNavToggle() {
-    const toggle = $('.nav-toggle')
-    const nav = $('.nav')
-    if (!toggle || !nav) return
+  /* =========================
+     Theme Switcher
+     ========================= */
+  const ThemeSwitcher = (() => {
+    const STORAGE_KEY = 'theme';
 
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true'
-      toggle.setAttribute('aria-expanded', String(!expanded))
-      nav.classList.toggle('is-open')
-      document.body.classList.toggle('nav-open')
-    })
+    const getSystemTheme = () =>
+      window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
-        nav.classList.remove('is-open')
-        toggle.setAttribute('aria-expanded', 'false')
-        document.body.classList.remove('nav-open')
+    const getSavedTheme = () => localStorage.getItem(STORAGE_KEY);
+
+    const applyTheme = (theme) => {
+      document.documentElement.setAttribute('data-theme', theme);
+    };
+
+    const init = () => {
+      const saved = getSavedTheme();
+      applyTheme(saved || getSystemTheme());
+
+      // اتصال دکمه .theme-toggle
+      const btn = $('.theme-toggle');
+      if (btn) {
+        btn.addEventListener('click', toggle);
+        btn.setAttribute('aria-label', 'تغییر تم');
       }
-    })
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
-        nav.classList.remove('is-open')
-        toggle.setAttribute('aria-expanded', 'false')
-        toggle.focus()
-        document.body.classList.remove('nav-open')
-      }
-    })
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     2. Sticky Header — add class on scroll
-     ═══════════════════════════════════════════════════════════ */
-  function initStickyHeader() {
-    const header = $('.site-header')
-    if (!header) return
-
-    const onScroll = () => {
-      header.classList.toggle('is-scrolled', window.scrollY > 60)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     3. Scroll Reveal (IntersectionObserver)
-     ═══════════════════════════════════════════════════════════ */
-  function initScrollReveal() {
-    const items = $$('.reveal')
-    if (!items.length) return
-
-    // Respect reduced motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      items.forEach((el) => el.classList.add('is-visible'))
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target
-            const delay = el.dataset.revealDelay || 0
-            setTimeout(() => el.classList.add('is-visible'), Number(delay))
-            observer.unobserve(el)
-          }
-        })
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
-    )
-
-    items.forEach((el) => observer.observe(el))
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     4. Scroll-to-Top Button
-     ═══════════════════════════════════════════════════════════ */
-  function initScrollTop() {
-    const btn = $('.scroll-top')
-    if (!btn) return
+    };
 
     const toggle = () => {
-      btn.classList.toggle('is-visible', window.scrollY > 400)
-    }
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem(STORAGE_KEY, next);
+      Toast.show(next === 'dark' ? '🌙 حالت تاریک فعال شد' : '☀️ حالت روشن فعال شد', 'success', 1800);
+    };
 
-    window.addEventListener('scroll', toggle, { passive: true })
-    toggle()
+    return { init, toggle };
+  })();
 
-    btn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    })
-  }
+  /* =========================
+     Toast System (themed)
+     ========================= */
+  const Toast = (() => {
+    let host = null;
+    let timer = null;
 
-  /* ═══════════════════════════════════════════════════════════
-     5. Tabs
-     ═══════════════════════════════════════════════════════════ */
-  function initTabs() {
-    $$('.tabs').forEach((tabGroup) => {
-      const buttons = $$('[data-tab]', tabGroup)
-      const panels = $$('.tab-panel', tabGroup)
+    const createHost = () => {
+      if (host) return host;
+      host = document.createElement('div');
+      host.className = 'toast-host';
+      host.setAttribute('aria-live', 'polite');
+      host.setAttribute('aria-atomic', 'true');
+      Object.assign(host.style, {
+        position: 'fixed',
+        left: '50%',
+        bottom: '24px',
+        transform: 'translateX(-50%)',
+        zIndex: '9999',
+        display: 'grid',
+        gap: '8px',
+        pointerEvents: 'none'
+      });
+      document.body.appendChild(host);
+      return host;
+    };
 
-      buttons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const target = btn.dataset.tab
+    const show = (message = '', type = 'success', timeout = 2200) => {
+      const elHost = createHost();
+      const el = document.createElement('div');
+      el.className = `toast toast--${type}`;
+      el.textContent = message;
 
-          // Deactivate all
-          buttons.forEach((b) => {
-            b.classList.remove('active')
-            b.setAttribute('aria-selected', 'false')
-          })
-          panels.forEach((p) => p.classList.remove('active'))
+      const root = getComputedStyle(document.documentElement);
+      const accent = root.getPropertyValue('--accent')?.trim() || '#38bdf8';
+      const accent2 = root.getPropertyValue('--accent-hover')?.trim() || '#a855f7';
 
-          // Activate target
-          btn.classList.add('active')
-          btn.setAttribute('aria-selected', 'true')
-          const panel = $(`#${target}`, tabGroup)
-          if (panel) panel.classList.add('active')
-        })
+      Object.assign(el.style, {
+        padding: '10px 20px',
+        borderRadius: '12px',
+        color: type === 'error' ? '#fff' : '#0f172a',
+        fontSize: '14px',
+        fontWeight: '700',
+        fontFamily: 'Vazirmatn, sans-serif',
+        boxShadow: '0 12px 26px rgba(15, 0, 60, .45)',
+        background:
+          type === 'error'
+            ? 'linear-gradient(135deg,#ef4444,#dc2626)'
+            : `linear-gradient(135deg,${accent},${accent2})`,
+        opacity: '0',
+        transform: 'translateY(8px)',
+        transition: 'all .25s ease',
+        pointerEvents: 'auto',
+        whiteSpace: 'nowrap'
+      });
 
-        // Keyboard navigation (arrow keys)
-        btn.addEventListener('keydown', (e) => {
-          const idx = buttons.indexOf(btn)
-          let next = -1
-          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-            const dir = e.key === 'ArrowRight' ? 1 : -1
-            next = (idx + dir + buttons.length) % buttons.length
-          }
-          if (next >= 0) {
-            e.preventDefault()
-            buttons[next].focus()
-            buttons[next].click()
-          }
-        })
-      })
-    })
-  }
+      elHost.appendChild(el);
+      requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
 
-  /* ═══════════════════════════════════════════════════════════
-     6. Accordion / FAQ
-     ═══════════════════════════════════════════════════════════ */
-  function initAccordion() {
-    $$('.accordion').forEach((acc) => {
-      const items = $$('.accordion-item', acc)
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(8px)';
+        setTimeout(() => el.remove(), 260);
+      }, timeout);
+    };
 
-      items.forEach((item) => {
-        const trigger = $('.accordion-trigger', item)
-        if (!trigger) return
+    return { show };
+  })();
 
-        trigger.addEventListener('click', () => {
-          const isOpen = item.classList.contains('is-open')
+  /* =========================
+     Header Scroll State
+     ========================= */
+  const HeaderState = (() => {
+    // پشتیبانی از هر دو کلاس .site-header و .navbar
+    const header = $('.site-header') || $('.navbar');
+    if (!header) return { init() {} };
 
-          // Close all in this accordion
-          items.forEach((i) => {
-            i.classList.remove('is-open')
-            const t = $('.accordion-trigger', i)
-            if (t) t.setAttribute('aria-expanded', 'false')
-          })
+    const onScroll = () => {
+      const y = window.scrollY || window.pageYOffset;
+      header.classList.toggle('is-scrolled', y > 8);
+    };
 
-          // Toggle current
-          if (!isOpen) {
-            item.classList.add('is-open')
-            trigger.setAttribute('aria-expanded', 'true')
-          }
-        })
-
-        // Keyboard
-        trigger.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            trigger.click()
-          }
-        })
-      })
-    })
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     7. Modal
-     ═══════════════════════════════════════════════════════════ */
-  function initModal() {
-    let lastFocused = null
-
-    // Open
-    $$('[data-modal-open]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.modalOpen
-        const modal = $(`#${id}`)
-        if (!modal) return
-        lastFocused = document.activeElement
-        openModal(modal)
-      })
-    })
-
-    // Close
-    $$('[data-modal-close]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const modal = btn.closest('.modal-overlay')
-        if (modal) closeModal(modal)
-      })
-    })
-
-    // Close on overlay click
-    $$('.modal-overlay').forEach((overlay) => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeModal(overlay)
-      })
-    })
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const active = $('.modal-overlay.is-active')
-        if (active) closeModal(active)
+    return {
+      init() {
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
       }
-    })
+    };
+  })();
 
-    function openModal(modal) {
-      modal.classList.add('is-active')
-      modal.setAttribute('aria-hidden', 'false')
-      document.body.style.overflow = 'hidden'
+  /* =========================
+     Mobile Nav
+     ========================= */
+  const MobileNav = (() => {
+    const navToggle = $('.nav-toggle');
+    const nav = $('.nav');
+    const navLinks = $$('.nav a, .nav__link');
 
-      // Focus trap
-      const focusable = $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', modal)
-      if (focusable.length) focusable[0].focus()
+    if (!nav || !navToggle) return { init() {} };
 
-      modal.addEventListener('keydown', trapFocus)
-    }
+    const open = () => {
+      nav.classList.add('is-open');
+      navToggle.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('menu-open');
+    };
 
-    function closeModal(modal) {
-      modal.classList.remove('is-active')
-      modal.setAttribute('aria-hidden', 'true')
-      document.body.style.overflow = ''
-      modal.removeEventListener('keydown', trapFocus)
-      if (lastFocused) lastFocused.focus()
-    }
+    const close = () => {
+      nav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
+    };
 
-    function trapFocus(e) {
-      if (e.key !== 'Tab') return
-      const modal = e.currentTarget
-      const focusable = $$('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])', modal)
-      if (!focusable.length) return
+    const toggle = () => {
+      nav.classList.contains('is-open') ? close() : open();
+    };
 
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
+    const onDocClick = (e) => {
+      if (!isMobile()) return;
+      const insideNav = nav.contains(e.target);
+      const insideBtn = navToggle.contains(e.target);
+      if (!insideNav && !insideBtn) close();
+    };
 
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault()
-        first.focus()
+    const onResize = () => {
+      if (!isMobile()) close();
+    };
+
+    return {
+      init() {
+        navToggle.addEventListener('click', toggle);
+        navLinks.forEach((a) => a.addEventListener('click', () => isMobile() && close()));
+        document.addEventListener('click', onDocClick);
+        window.addEventListener('resize', onResize);
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') close();
+        });
       }
-    }
-  }
+    };
+  })();
 
-  /* ═══════════════════════════════════════════════════════════
-     8. Count-Up Animation (Stats)
-     ═══════════════════════════════════════════════════════════ */
-  function initCountUp() {
-    const counters = $$('[data-count]')
-    if (!counters.length) return
+  /* =========================
+     Smooth Anchor Scrolling
+     ========================= */
+  const SmoothAnchors = (() => {
+    const links = $$('a[href^="#"]');
+    const getHeader = () => $('.site-header') || $('.navbar');
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      counters.forEach((el) => {
-        el.textContent = Number(el.dataset.count).toLocaleString('fa-IR')
-      })
-      return
-    }
+    const getOffset = () => {
+      const header = getHeader();
+      return (header ? header.offsetHeight : 0) + 12;
+    };
+
+    const onClick = (e) => {
+      const href = e.currentTarget.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+
+      e.preventDefault();
+      smoothScrollTo(target, getOffset());
+      history.pushState(null, '', href);
+    };
+
+    return {
+      init() {
+        links.forEach((link) => link.addEventListener('click', onClick));
+      }
+    };
+  })();
+
+  /* =========================
+     Active Nav Link by Section
+     ========================= */
+  const ActiveSection = (() => {
+    const links = $$('.nav__link, .nav a, .navbar-nav a').filter((a) =>
+      a.getAttribute('href')?.startsWith('#')
+    );
+
+    if (!links.length) return { init() {} };
+
+    const sections = links
+      .map((a) => document.getElementById(a.getAttribute('href').slice(1)))
+      .filter(Boolean);
+
+    if (!sections.length) return { init() {} };
+
+    let activeId = null;
+
+    const setActive = (id) => {
+      if (activeId === id) return;
+      activeId = id;
+
+      links.forEach((a) => {
+        const isActive = a.getAttribute('href') === `#${id}`;
+        a.classList.toggle('is-active', isActive);
+        a.classList.toggle('active', isActive);
+        if (isActive) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCount(entry.target)
-            observer.unobserve(entry.target)
-          }
-        })
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible.length) setActive(visible[0].target.id);
       },
-      { threshold: 0.5 }
-    )
+      { rootMargin: '-35% 0px -55% 0px', threshold: [0.2, 0.4, 0.7] }
+    );
 
-    counters.forEach((el) => observer.observe(el))
-
-    function animateCount(el) {
-      const target = Number(el.dataset.count)
-      const duration = Number(el.dataset.duration) || 2000
-      const start = performance.now()
-      const isRtl = getComputedStyle(el).direction === 'rtl'
-
-      function step(now) {
-        const progress = Math.min((now - start) / duration, 1)
-        const eased = 1 - Math.pow(1 - progress, 3) // easeOutCubic
-        const current = Math.floor(eased * target)
-
-        el.textContent = isRtl
-          ? current.toLocaleString('fa-IR')
-          : current.toLocaleString()
-
-        if (progress < 1) requestAnimationFrame(step)
+    return {
+      init() {
+        sections.forEach((s) => observer.observe(s));
       }
+    };
+  })();
 
-      requestAnimationFrame(step)
-    }
-  }
+  /* =========================
+     Scroll Top Button
+     ========================= */
+  const ScrollTop = (() => {
+    const btn = $('.scroll-top');
+    if (!btn) return { init() {} };
 
-  /* ═══════════════════════════════════════════════════════════
-     9. Tooltips (keyboard + hover)
-     ═══════════════════════════════════════════════════════════ */
-  function initTooltips() {
-    $$('.tooltip-wrap').forEach((wrap) => {
-      const trigger = wrap.firstElementChild
-      if (!trigger) return
+    const update = () => {
+      const y = window.scrollY || window.pageYOffset;
+      btn.classList.toggle('is-visible', y > 300);
+    };
 
-      trigger.setAttribute('tabindex', trigger.getAttribute('tabindex') || '0')
+    const goTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      trigger.addEventListener('focus', () => wrap.classList.add('is-active'))
-      trigger.addEventListener('blur', () => wrap.classList.remove('is-active'))
-      trigger.addEventListener('mouseenter', () => wrap.classList.add('is-active'))
-      trigger.addEventListener('mouseleave', () => wrap.classList.remove('is-active'))
-
-      trigger.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          wrap.classList.remove('is-active')
-          trigger.blur()
-        }
-      })
-    })
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     10. Language / Direction Switch
-     ═══════════════════════════════════════════════════════════ */
-  function initLangSwitch() {
-    const btn = $('[data-lang-toggle]')
-    if (!btn) return
-
-    btn.addEventListener('click', () => {
-      const html = document.documentElement
-      const isRtl = html.getAttribute('dir') !== 'ltr'
-
-      if (isRtl) {
-        html.setAttribute('dir', 'ltr')
-        html.classList.add('ltr')
-        html.classList.remove('rtl')
-        document.body.classList.add('lang-en')
-        document.body.classList.remove('lang-fa')
-        btn.textContent = 'فا'
-      } else {
-        html.setAttribute('dir', 'rtl')
-        html.classList.remove('ltr')
-        html.classList.add('rtl')
-        document.body.classList.remove('lang-en')
-        document.body.classList.add('lang-fa')
-        btn.textContent = 'EN'
+    return {
+      init() {
+        update();
+        window.addEventListener('scroll', update, { passive: true });
+        btn.addEventListener('click', goTop);
       }
+    };
+  })();
 
-      // Persist preference
-      try {
-        localStorage.setItem('nano-lang', isRtl ? 'en' : 'fa')
-      } catch (e) { /* silent */ }
-    })
+  /* =========================
+     Accordion
+     ========================= */
+  const Accordion = (() => {
+    const items = $$('.accordion-item');
+    if (!items.length) return { init() {} };
 
-    // Restore preference
-    try {
-      const saved = localStorage.getItem('nano-lang')
-      if (saved === 'en') btn.click()
-    } catch (e) { /* silent */ }
-  }
+    const closeAll = () => {
+      $$('.accordion-header').forEach((h) => h.classList.remove('active'));
+      $$('.accordion-body').forEach((b) => b.classList.remove('open'));
+    };
 
-  /* ═══════════════════════════════════════════════════════════
-     11. Smooth Scroll for Anchor Links
-     ═══════════════════════════════════════════════════════════ */
-  function initSmoothScroll() {
-    $$('a[href^="#"]').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        const id = link.getAttribute('href')
-        if (id === '#' || id === '#!') return
+    const open = (header, body) => {
+      header.classList.add('active');
+      body.classList.add('open');
+      header.setAttribute('aria-expanded', 'true');
+    };
 
-        const target = $(id)
-        if (!target) return
+    const close = (header, body) => {
+      header.classList.remove('active');
+      body.classList.remove('open');
+      header.setAttribute('aria-expanded', 'false');
+    };
 
-        e.preventDefault()
+    const toggle = (header, body) => {
+      const isOpen = body.classList.contains('open');
+      closeAll();
+      if (!isOpen) open(header, body);
+    };
 
-        const header = $('.site-header')
-        const offset = header ? header.offsetHeight + 16 : 16
+    return {
+      init() {
+        items.forEach((item) => {
+          const header = $('.accordion-header', item);
+          const body = $('.accordion-body', item);
+          if (!header || !body) return;
 
-        const top = target.getBoundingClientRect().top + window.scrollY - offset
-        window.scrollTo({ top, behavior: 'smooth' })
+          // دسترسی‌پذیری
+          header.setAttribute('role', 'button');
+          header.setAttribute('aria-expanded', 'false');
+          header.setAttribute('tabindex', '0');
 
-        // Close mobile nav if open
-        const nav = $('.nav')
-        if (nav && nav.classList.contains('is-open')) {
-          nav.classList.remove('is-open')
-          const toggle = $('.nav-toggle')
-          if (toggle) toggle.setAttribute('aria-expanded', 'false')
-          document.body.classList.remove('nav-open')
-        }
+          header.addEventListener('click', () => toggle(header, body));
 
-        // Set focus for accessibility
-        target.setAttribute('tabindex', '-1')
-        target.focus({ preventScroll: true })
-      })
-    })
-  }
-
-  /* ═══════════════════════════════════════════════════════════
-     12. Toast Notifications (Public API)
-     ═══════════════════════════════════════════════════════════ */
-  window.NanoToast = {
-    show(message, { type = 'info', duration = 4000 } = {}) {
-      let container = $('.toast-container')
-      if (!container) {
-        container = document.createElement('div')
-        container.className = 'toast-container'
-        container.setAttribute('aria-live', 'polite')
-        container.setAttribute('aria-atomic', 'true')
-        document.body.appendChild(container)
+          // پشتیبانی از کیبورد
+          header.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggle(header, body);
+            }
+            if (e.key === 'Escape') close(header, body);
+          });
+        });
       }
+    };
+  })();
 
-      const toast = document.createElement('div')
-      toast.className = `toast toast--${type}`
-      toast.setAttribute('role', 'status')
-      toast.textContent = message
+  /* =========================
+     Gallery Modal Slider
+     ========================= */
+  const GalleryModal = (() => {
+    // پشتیبانی از هر دو ساختار: #galleryModal و .lightbox
+    const modal = $('#galleryModal') || $('.lightbox');
+    const modalImg = $('#modalImg') || $('img', modal || document);
+    const modalCaption = $('#modalCaption') || $('.lightbox-caption');
+    const closeBtn = $('.modal__close, .modal-close, .lightbox-close', modal || document);
+    const prevBtn = $('.modal-nav--prev', modal || document);
+    const nextBtn = $('.modal-nav--next', modal || document);
 
-      // Close button
-      const closeBtn = document.createElement('button')
-      closeBtn.className = 'toast-close'
-      closeBtn.setAttribute('aria-label', 'بستن')
-      closeBtn.innerHTML = '&times;'
-      closeBtn.addEventListener('click', () => dismiss(toast))
-      toast.appendChild(closeBtn)
+    // پشتیبانی از هر دو کلاس: .gallery__item و .gallery-item
+    const items = $$('.gallery__item, .gallery-item');
 
-      container.appendChild(toast)
+    if (!modal || !modalImg || !items.length) return { init() {} };
 
-      // Trigger animation
-      requestAnimationFrame(() => toast.classList.add('is-visible'))
-
-      // Auto dismiss
-      if (duration > 0) {
-        setTimeout(() => dismiss(toast), duration)
-      }
-
-      function dismiss(el) {
-        el.classList.remove('is-visible')
-        el.addEventListener('transitionend', () => el.remove(), { once: true })
-        // Fallback removal
-        setTimeout(() => { if (el.parentNode) el.remove() }, 500)
-      }
-
-      return toast
-    },
-
-    success(msg, opts) { return this.show(msg, { ...opts, type: 'success' }) },
-    error(msg, opts) { return this.show(msg, { ...opts, type: 'error' }) },
-    warning(msg, opts) { return this.show(msg, { ...opts, type: 'warning' }) },
-    info(msg, opts) { return this.show(msg, { ...opts, type: 'info' }) },
-  }
-
-})()
------------------------------------------------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  const copyButtons = document.querySelectorAll(".copy-id");
-
-  copyButtons.forEach((button) => {
-    button.addEventListener("click", async () => {
-      const text = button.getAttribute("data-copy");
-      const feedback = button.parentElement.querySelector(".copy-feedback");
-
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          const ta = document.createElement("textarea");
-          ta.value = text;
-          ta.style.position = "fixed";
-          ta.style.left = "-9999px";
-          document.body.appendChild(ta);
-          ta.focus();
-          ta.select();
-          document.execCommand("copy");
-          ta.remove();
-        }
-
-        if (feedback) feedback.textContent = "آیدی کپی شد.";
-      } catch (err) {
-        if (feedback) feedback.textContent = "کپی انجام نشد.";
-      }
-
-      setTimeout(() => {
-        if (feedback) feedback.textContent = "";
-      }, 2000);
+    const images = items.map((item) => {
+      const img = $('img', item);
+      return {
+        src: img?.getAttribute('src') || '',
+        alt: img?.getAttribute('alt') || ''
+      };
     });
-  });
-});
+
+    let index = 0;
+    let startX = 0;
+    let endX = 0;
+
+    const setImage = (i) => {
+      index = clamp(i, 0, images.length - 1);
+      const current = images[index];
+
+      // انیمیشن fade هنگام تغییر تصویر
+      modalImg.style.opacity = '0';
+      setTimeout(() => {
+        modalImg.src = current.src;
+        modalImg.alt = current.alt || 'تصویر بزرگ‌شده';
+        modalImg.style.opacity = '1';
+      }, 150);
+
+      if (modalCaption) modalCaption.textContent = current.alt || '';
+      modal.setAttribute('data-index', String(index));
+
+      // وضعیت دکمه‌های ناوبری
+      if (prevBtn) prevBtn.disabled = index === 0;
+      if (nextBtn) nextBtn.disabled = index === images.length - 1;
+    };
+
+    const open = (i = 0) => {
+      setImage(i);
+      modal.classList.add('is-open', 'active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      modal.focus?.();
+    };
+
+    const close = () => {
+      modal.classList.remove('is-open', 'active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+    };
+
+    const next = () => setImage((index + 1) % images.length);
+    const prev = () => setImage((index - 1 + images.length) % images.length);
+
+    const onKey = (e) => {
+      if (!modal.classList.contains('is-open') && !modal.classList.contains('active')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') prev();
+      if (e.key === 'ArrowLeft') next();
+    };
+
+    const onOverlayClick = (e) => {
+      // کلیک روی پس‌زمینه modal (نه محتوا)
+      if (e.target === modal) close();
+    };
+
+    const onTouchStart = (e) => {
+      startX = e.changedTouches[0].clientX;
+    };
+
+    const onTouchEnd = (e) => {
+      endX = e.changedTouches[0].clientX;
+      const diff = endX - startX;
+      if (Math.abs(diff) < 40) return;
+      if (diff > 0) prev();
+      else next();
+    };
+
+    return {
+      init() {
+        items.forEach((item, i) => {
+          item.addEventListener('click', () => open(i));
+          item.setAttribute('tabindex', '0');
+          item.setAttribute('role', 'button');
+          item.setAttribute('aria-label', `باز کردن تصویر ${i + 1}`);
+          item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              open(i);
+            }
+          });
+        });
+
+        closeBtn?.addEventListener('click', close);
+        prevBtn?.addEventListener('click', prev);
+        nextBtn?.addEventListener('click', next);
+
+        modal.addEventListener('click', onOverlayClick);
+        document.addEventListener('keydown', onKey);
+
+        modal.addEventListener('touchstart', onTouchStart, { passive: true });
+        modal.addEventListener('touchend', onTouchEnd, { passive: true });
+
+        // transition برای fade تصویر
+        modalImg.style.transition = 'opacity 0.15s ease';
+      }
+    };
+  })();
+
+  /* =========================
+     Reduced Motion Support
+     ========================= */
+  const MotionSafety = (() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const apply = () => {
+      document.documentElement.classList.toggle('reduced-motion', media.matches);
+    };
+
+    return {
+      init() {
+        apply();
+        media.addEventListener?.('change', apply);
+      }
+    };
+  })();
+
+  /* =========================
+     App Init
+     ========================= */
+  const App = {
+    init() {
+      MotionSafety.init();
+      ThemeSwitcher.init();
+      HeaderState.init();
+      MobileNav.init();
+      SmoothAnchors.init();
+      ActiveSection.init();
+      ScrollTop.init();
+      Accordion.init();
+      GalleryModal.init();
+
+      if (location.hash) {
+        const target = document.getElementById(location.hash.slice(1));
+        if (target) {
+          setTimeout(() => {
+            const header = $('.site-header') || $('.navbar');
+            const offset = (header ? header.offsetHeight : 0) + 12;
+            smoothScrollTo(target, offset);
+          }, 120);
+        }
+      }
+
+      console.log('✅ main.js loaded');
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', App.init);
+})();
