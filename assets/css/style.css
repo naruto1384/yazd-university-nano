@@ -656,3 +656,21 @@ footer {
 .mt-3 { margin-top: 1.5rem; }
 .mb-2 { margin-bottom: 1rem; }
 .mb-3 { margin-bottom: 1.5rem; }
+.hero__logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.hero__logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+@media (max-width: 768px) {
+  .hero__logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
