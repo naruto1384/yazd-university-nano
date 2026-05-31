@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>برنامه‌ها</title>
+
+  <!-- CSS صفحه اصلی -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- استایل دکمه بازگشت (اختصاصی همین صفحه) -->
+  <style>
+    .top-actions{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .back-btn{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: inherit;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .back-btn:hover{
+      background: rgba(255,255,255,.10);
+    }
+    .back-btn:active{
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- دکمه تغییر تم -->
+  <button class="theme-toggle" aria-label="تغییر تم">
+    <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
+    <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+  </button>
+
+  <div class="container">
+
+    <!-- ردیف بالا: بازگشت + عنوان -->
+    <div class="top-actions">
+      <a class="back-btn" href="../index.html" aria-label="بازگشت به صفحه اصلی">
+        ← بازگشت
+      </a>
+
+      <h1 style="margin:0;">انتخاب برنامه</h1>
+    </div>
+
+    <div class="grid">
+ 
+
+      <a class="card" href="story-clock/index.html">
+        <div class="title">داستان ساعت</div>
+        <p class="desc">صفحه‌ی مربوط به داستان ساعت</p>
+      </a>
+
+      <a class="card" href="industry-visit/index.html">
+        <div class="title">بازدید صنعتی از فولاد آلیاژی ایران</div>
+        <p class="desc">زمان، مکان، هماهنگی‌ها و نکات بازدید</p>
+      </a>
+
+      <a class="card" href="physics-meeting/index.html">
+        <div class="title">گردهمایی سراسری فیزیک + بازدید از آزمایشگاه‌های دانشگاه تهران و شریف</div>
+        <p class="desc">برنامه گردهمایی و بازدید آزمایشگاه‌ها</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- JavaScript تغییر تم -->
+  <script src="js/theme.js"></script>
+</body>
+</html>
