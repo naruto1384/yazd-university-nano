@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>شب علم</title>
+
+  <link rel="stylesheet" href="../css/pages.css">
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="page__controls">
+      <a class="control-chip" href="../index.html">← بازگشت</a>
+
+      <button class="theme-toggle" aria-label="تغییر تم">
+        <span class="theme-toggle__icon theme-toggle__icon--sun">☀️</span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon">🌙</span>
+      </button>
+    </div>
+
+    <main class="event">
+
+      <section class="event__top">
+
+        <!-- پوستر -->
+        <article class="panel poster">
+          <header class="panel__header">
+            <h2 class="panel__title">پوستر رویداد</h2>
+            <p class="panel__subtitle">شب علم</p>
+          </header>
+
+          <div class="poster__media">
+            <img class="media-img" src="images/p.webp" alt="پوستر شب علم">
+          </div>
+        </article>
+
+        <!-- اسلایدشو -->
+        <article class="panel slideshow">
+          <header class="panel__header">
+            <h2 class="panel__title">تصاویر رویداد</h2>
+            <p class="panel__subtitle">به صورت خودکار تغییر می‌کند</p>
+          </header>
+
+          <div class="slideshow__viewport">
+            <div class="slides" data-interval="3000">
+              <div class="slide is-active">
+                <img src="images/1.webp" alt="تصویر 1 شب علم">
+              </div>
+              <div class="slide">
+                <img src="images/2.webp" alt="تصویر 2 شب علم">
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- گزارش -->
+      <section class="panel report event__bottom">
+        <header class="panel__header">
+          <h2 class="panel__title">گزارش رویداد</h2>
+          <p class="panel__subtitle">شب علم</p>
+        </header>
+
+        <div class="report__body">
+          <p>
+در این رویداد تمامی انجمن های علمی برای خود غرفه ای درست کردند و از تمامی دستاورد هایشان رونمایی کردند این رویداد یکی از بزگترین رویداد هایی بود که در سال تحصیلی دانشگاه ان را اچرا کرد دانشجویان در این رویداد چیز های بسیار زیاد و متنوعی از تمامی علم ها یاد گرفتند.
+          </p>
+        </div>
+
+        <footer class="report__meta">
+          <span class="badge">عنوان: شب علم</span>
+          <span class="badge">تاریخ: —</span>
+          <span class="badge">مکان: —</span>
+        </footer>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="../js/theme.js" defer></script>
+  <script src="../js/slideshow.js" defer></script>
+</body>
+</html>
