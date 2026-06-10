@@ -1,0 +1,247 @@
+/* ===== متغیرهای تم ===== */
+:root {
+    --font: 'Vazirmatn', Tahoma, sans-serif;
+    --accent: #fbbf24;
+    --accent-soft: rgba(251, 191, 36, 0.25);
+    --radius: 20px;
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* تم تاریک (پیش‌فرض) */
+:root,
+[data-theme="dark"] {
+    --bg: radial-gradient(circle at top left, rgba(59, 130, 246, 0.2), transparent 35%),
+          radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.15), transparent 30%),
+          linear-gradient(135deg, #0f172a 0%, #1e293b 45%, #111827 100%);
+    --text: #f8fafc;
+    --text-muted: #cbd5e1;
+    --card-bg: rgba(255, 255, 255, 0.08);
+    --card-bg-hover: rgba(255, 255, 255, 0.12);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --content-bg: rgba(15, 23, 42, 0.6);
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* تم روشن */
+[data-theme="light"] {
+    --bg: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 35%),
+          radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.18), transparent 30%),
+          linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 45%, #f8fafc 100%);
+    --text: #1e293b;
+    --text-muted: #475569;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-bg-hover: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(15, 23, 42, 0.08);
+    --content-bg: rgba(255, 255, 255, 0.75);
+    --shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+}
+
+/* ===== تنظیمات پایه ===== */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font) !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    direction: rtl;
+    background: var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+.hero-container { text-align: center; padding-top: 100px; }
+
+.menu-page, .self-page, .gallery-container {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.menu-title, .section-title {
+    text-align: center;
+    color: var(--accent);
+    margin-bottom: 40px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.5px;
+}
+
+.menu-grid, .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ===== کارت‌ها ===== */
+.menu-item, .grid-item, .step-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    padding: 20px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.menu-item:hover, .grid-item:hover, .step-card:hover {
+    background: var(--card-bg-hover);
+    border: 1px solid var(--accent);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 0 25px var(--accent-soft);
+}
+
+.menu-item:active, .grid-item:active, .step-card:active {
+    transform: scale(0.96);
+}
+
+.exit {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+}
+
+.back {
+    background: var(--card-bg) !important;
+    color: var(--text-muted) !important;
+}
+
+/* ===== جعبه محتوای بازشونده ===== */
+.content-box {
+    max-height: 0;
+    overflow: hidden;
+    background: var(--content-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    margin: -10px 0 10px 0;
+    padding: 0 20px;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    transition: max-height 0.5s ease, padding 0.5s ease;
+    border-right: 4px solid var(--accent);
+    color: var(--text);
+}
+
+.content-box.active { max-height: 500px; padding: 20px; }
+.content-box.always-open { max-height: none; padding: 20px; overflow: visible; }
+
+/* ===== کارت مراحل ===== */
+.step-card { flex-direction: column; text-align: center; }
+
+.step-card img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 12px;
+    cursor: zoom-in;
+    margin-bottom: 15px;
+    transition: transform 0.5s ease;
+}
+
+.step-card img:hover { transform: scale(1.05); }
+
+.step-num {
+    background: var(--accent);
+    color: #000;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    align-self: flex-start;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* ===== مودال تصویر ===== */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.image-modal.active { display: flex; }
+
+.image-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== کادر دکمه راهنما ===== */
+.guide-btn-box {
+    border: 2px solid var(--accent) !important;
+    box-shadow: 0 0 15px var(--accent-soft) !important;
+    background: rgba(251, 191, 36, 0.05) !important;
+}
+
+.guide-btn-box:hover {
+    background: rgba(251, 191, 36, 0.15) !important;
+}
+
+/* ===== دکمه شروع ===== */
+.btn-start {
+    display: inline-block;
+    padding: 15px 40px;
+    margin-top: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50px;
+    transition: all 0.4s ease;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--accent), #f59e0b);
+    box-shadow: 0 6px 20px var(--accent-soft);
+}
+
+.btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px var(--accent-soft);
+}
+
+/* ===== دکمه تغییر تم ===== */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text);
+    font-size: 1.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-soft);
+}
+
+/* آیکون خورشید/ماه بر اساس تم */
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: inline; }
+[data-theme="light"] .theme-toggle .icon-sun { display: inline; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }

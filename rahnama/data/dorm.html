@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>راهنمای خوابگاه دانشگاه یزد</title>
+<meta name="description" content="راهنمای خوابگاه دانشجویان ورودی جدید دانشگاه یزد">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="self-page">
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<h1 class="section-title">راهنمای خوابگاه</h1>
+
+<div class="menu-grid">
+
+  <div class="menu-item" role="button" tabindex="0"
+       aria-expanded="false" aria-controls="dorm-location"
+       onclick="toggleContent('dorm-location')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleContent('dorm-location')}">
+    موقعیت خوابگاه <span>1</span>
+  </div>
+  <div id="dorm-location" class="content-box">
+    <p>دانشجویان عزیز برای رفتن به خوابگاه می‌توانید از مسیر زیر استفاده کنید.</p>
+    <a href="https://nshn.ir/sbXtP2yGLnHQ" target="_blank" rel="noopener noreferrer">
+      مشاهده مسیر خوابگاه
+    </a>
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='rules.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='rules.html'">
+    قوانین خوابگاه <span>2</span>
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       aria-expanded="false" aria-controls="facilities"
+       onclick="toggleContent('facilities')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleContent('facilities')}">
+    امکانات خوابگاه <span>3</span>
+  </div>
+  <div id="facilities" class="content-box">
+    <ul>
+      <li>خشک‌شویی</li>
+      <li>گیم‌نت</li>
+      <li>زمین چمن</li>
+      <li>سوپرمارکت</li>
+      <li>چاپ و تکثیر</li>
+      <li>آرایشگاه</li>
+      <li>سالن مطالعه</li>
+      <li>باشگاه</li>
+      <li>سالن کشتی و بوکس</li>
+      <li>فوتبال ساحلی و والیبال ساحلی</li>
+    </ul>
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='menu.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='menu.html'">
+    بازگشت به صفحه قبل <span>4</span>
+  </div>
+
+</div>
+
+<script defer src="js/main.js"></script>
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+
+</body>
+</html>

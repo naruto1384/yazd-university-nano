@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "زبان عمومی ۱",
+    "author": "گروه مؤلفان",
+    "category": "زبان انگلیسی",
+    "cover": "assets/1.webp",
+    "viewUrl": "https://drive.google.com/file/d/1kh2jMudCEiDmNLCz0mORewjBnJxazKmA/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1kh2jMudCEiDmNLCz0mORewjBnJxazKmA&export=download"
+  },
+    {
+    "id": 1,
+    "title": "مکانیک تحلیلی (حل المسائل)",
+    "author": "گروه مؤلفان",
+    "category": "مکانیک تحلیلی",
+    "cover": "assets/2.webp",
+    "viewUrl": "https://drive.google.com/file/d/1YuM50SR4hb0W13PVyz0UY3XShMVK2p0V/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1YuM50SR4hb0W13PVyz0UY3XShMVK2p0V&export=download"
+  }
+]

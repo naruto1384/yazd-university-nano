@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سلف دانشگاه یزد</title>
+<meta name="description" content="راهنمای سلف دانشگاه یزد، معرفی سلف‌ها، آموزش رزرو غذا و قوانین">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="self-page">
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<h1 class="section-title">راهنمای سلف دانشگاه</h1>
+
+<div class="menu-grid">
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='self-introduce.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='self-introduce.html'">
+    معرفی سلف‌ها <span>1</span>
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       aria-expanded="false" aria-controls="self-order"
+       onclick="toggleContent('self-order')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleContent('self-order')}">
+    آموزش رزرو غذا <span>2</span>
+  </div>
+  <div id="self-order" class="content-box">
+    <p>دانشجویان عزیز جهت سفارش غذا می‌بایست وارد سایت کالینان با نشانی
+    <a href="https://jeton.yazd.ac.ir/" target="_blank" rel="noopener noreferrer">jeton.yazd.ac.ir</a> شوید.</p>
+    <p>سپس در بخش پرداخت اینترنتی، حساب خود را شارژ کرده و از بخش «خرید غذای هفتگی»، غذای خود را انتخاب و ذخیره کنید.</p>
+    <p><b>نکته:</b> نام کاربری شماره دانشجویی و کلمه عبور کد ملی شماست. (در صورت خطا، کد ملی را بدون صفر اولیه وارد کنید).</p>
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='self-rules.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='self-rules.html'">
+    قوانین و نکات سلف <span>3</span>
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='menu.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='menu.html'">
+    بازگشت به صفحه قبل <span>4</span>
+  </div>
+
+</div>
+
+<script defer src="js/main.js"></script>
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+
+</body>
+</html>

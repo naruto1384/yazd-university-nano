@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>امکانات خوابگاه</title>
+<meta name="description" content="معرفی امکانات رفاهی و خدماتی خوابگاه دانشگاه">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="self-page">
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<main>
+  <h1 class="section-title">امکانات خوابگاه</h1>
+
+  <div class="menu-grid">
+    <div class="content-box" style="display:block">
+      <p>گزینه مورد نظر را انتخاب کنید</p>
+      <ul style="line-height:2;font-size:18px">
+        <li>۱ - خشک‌شویی</li>
+        <li>۲ - گیم‌نت</li>
+        <li>۳ - زمین چمن</li>
+        <li>۴ - سوپرمارکت</li>
+        <li>۵ - چاپ و تکثیر</li>
+        <li>۶ - آرایشگاه</li>
+        <li>۷ - سالن مطالعه</li>
+        <li>۸ - باشگاه</li>
+        <li>۹ - سالن کشتی و بوکس</li>
+        <li>۱۰ - فوتبال ساحلی و والیبال ساحلی</li>
+      </ul>
+    </div>
+
+    <div class="menu-item" role="button" tabindex="0"
+         onclick="location.href='dorm.html'"
+         onkeydown="if(event.key==='Enter'||event.key===' ')location.href='dorm.html'">
+      بازگشت به صفحه قبل
+    </div>
+  </div>
+</main>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="راهنمای دانشجویان ورودی جدید دانشگاه یزد">
+  <title>راهنمای دانشجویان ورودی جدید</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* دکمه بازگشت — وصل به متغیرهای تم تا در هر دو حالت درست دیده شود */
+    .back-btn {
+      display: inline-block;
+      margin: 20px;
+      padding: 10px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .back-btn:hover {
+      background: var(--card-bg-hover);
+      color: var(--text);
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+
+<body class="intro-page">
+
+  <!-- دکمه تغییر تم -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="تغییر تم">
+    <span class="icon-moon">🌙</span>
+    <span class="icon-sun">☀️</span>
+  </button>
+
+  <!-- دکمه بازگشت به صفحه اصلی -->
+  <header>
+    <a href="../index.html" class="back-btn">← بازگشت به صفحه اصلی</a>
+  </header>
+
+  <main class="hero-container">
+
+    <h1>به دانشگاه یزد خوش آمدید</h1>
+
+    <p>
+      این سامانه برای راهنمایی دانشجویان ورودی جدید طراحی شده تا
+      در ابتدای ورود به دانشگاه با بخش‌های مختلف آشنا شوید.
+    </p>
+
+    <p class="credit">
+      تهیه و تنظیم توسط
+      <strong>انجمن علمی نانو فناوری دانشگاه یزد</strong>
+    </p>
+
+    <a href="menu.html" class="btn-start guide-btn-box">ورود به راهنما</a>
+
+  </main>
+
+  <!-- مقداردهی اولیه تم (قبل از رسم برای جلوگیری از پرش رنگ) -->
+  <script>
+    (function () {
+      const saved = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+  </script>
+
+</body>
+</html>

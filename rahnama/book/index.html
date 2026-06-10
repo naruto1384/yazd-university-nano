@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>کتابخانه و منابع درسی</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/books.css">
+</head>
+
+<body class="books-page">
+
+  <!-- دکمه تغییر تم -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="تغییر تم روشن و تاریک">
+    <span class="icon-moon">🌙</span>
+    <span class="icon-sun">☀️</span>
+  </button>
+
+  <header class="library-header">
+    <h1 class="section-title">کتابخانه و دانلود کتب درسی</h1>
+    <p class="section-subtitle">
+      در این بخش می‌توانید کتاب‌های درسی، جزوه‌ها و منابع آموزشی رشته‌های مختلف را جستجو و دانلود کنید.
+    </p>
+  </header>
+
+  <main class="library-container">
+
+    <!-- جستجو و فیلتر -->
+    <div class="search-filter-container">
+      <input
+        type="text"
+        id="searchBar"
+        class="search-box"
+        placeholder="جستجوی کتاب بر اساس نام، نویسنده یا رشته..."
+        aria-label="جستجوی کتاب"
+        autocomplete="off"
+      >
+
+      <div class="categories" id="categoryContainer">
+        <button class="category-btn active" onclick="filterCategory('all', this)">همه منابع</button>
+        <button class="category-btn" onclick="filterCategory('ریاضی', this)">ریاضیات</button>
+        <button class="category-btn" onclick="filterCategory('فیزیک', this)">فیزیک</button>
+        <button class="category-btn" onclick="filterCategory('کامپیوتر', this)">کامپیوتر</button>
+      </div>
+    </div>
+
+    <!-- شمارنده نتایج -->
+    <p class="result-count" id="resultCount"></p>
+
+    <!-- نشانگر لودینگ -->
+    <div class="loader" id="loader">در حال بارگذاری کتاب‌ها...</div>
+
+    <!-- لیست کتاب‌ها - به صورت داینامیک توسط books.js پر می‌شود -->
+    <div class="books-grid" id="booksGrid"></div>
+
+    <!-- حالت خالی -->
+    <p class="empty-state" id="emptyState" hidden>کتابی با این مشخصات یافت نشد 😕</p>
+
+    <!-- دکمه بازگشت -->
+    <div class="grid-item back-btn" onclick="location.href='menu.html'">
+      بازگشت به منوی اصلی
+    </div>
+
+  </main>
+
+  <!-- مودال مشاهده آنلاین کتاب -->
+  <div class="modal" id="bookModal" hidden role="dialog" aria-modal="true">
+    <div class="modal__overlay" id="modalOverlay"></div>
+    <div class="modal__content" id="modalContent">
+      <button class="modal__close" onclick="closeModal()" aria-label="بستن">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- اسکریپت منطق کتابخانه (لود کتاب‌ها، جستجو، فیلتر، تم) -->
+  <script src="js/books.js"></script>
+
+</body>
+</html>

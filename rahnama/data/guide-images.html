@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مراحل جستجوی کتاب</title>
+    <meta name="description" content="راهنمای تصویری مراحل جستجوی کتاب در سامانه کتابخانه">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .gallery {
+            max-width: 900px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        .gallery img {
+            width: 100%;
+            max-height: 600px;
+            border-radius: var(--radius);
+            object-fit: contain;
+            box-shadow: var(--shadow);
+            cursor: zoom-in;
+            border: var(--card-border);
+        }
+    </style>
+</head>
+
+<body class="guide-page">
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<main>
+  <h1 class="section-title">مراحل جستجوی کتاب در سامانه</h1>
+
+  <div class="gallery">
+      <img src="images/1.jpg" alt="مرحله ۱ جستجوی کتاب" onclick="openImage(this)">
+      <img src="images/2.jpg" alt="مرحله ۲ جستجوی کتاب" onclick="openImage(this)">
+      <img src="images/3.jpg" alt="مرحله ۳ جستجوی کتاب" onclick="openImage(this)">
+      <img src="images/4.jpg" alt="مرحله ۴ جستجوی کتاب" onclick="openImage(this)">
+  </div>
+
+  <div class="menu-item back-btn" role="button" tabindex="0"
+       style="cursor:pointer;text-align:center;max-width:300px;margin:30px auto 0"
+       onclick="location.href='library.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='library.html'">
+    بازگشت به صفحه راهنما
+  </div>
+</main>
+
+<div id="imageModal" class="image-modal" onclick="closeImage()">
+    <img id="modalImg" alt="">
+</div>
+
+<script defer src="js/main.js"></script>
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+</body>
+</html>

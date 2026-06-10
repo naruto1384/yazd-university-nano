@@ -1,0 +1,61 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "مبانی برنامه‌نویسی پایتون",
+      "author": "علی رضایی",
+      "category": "برنامه‌نویسی",
+      "year": 1402,
+      "pages": 320,
+      "cover": "https://placehold.co/300x420/4f46e5/ffffff?text=Python",
+      "description": "آموزش گام‌به‌گام پایتون برای دانشجویان مبتدی تا متوسط.",
+      "fileUrl": "files/python-basics.pdf",
+      "fileSize": "4.2 MB"
+    },
+    {
+      "id": 2,
+      "title": "ساختمان داده‌ها و الگوریتم‌ها",
+      "author": "مریم احمدی",
+      "category": "علوم کامپیوتر",
+      "year": 1401,
+      "pages": 540,
+      "cover": "https://placehold.co/300x420/059669/ffffff?text=DSA",
+      "description": "مرجع کامل ساختمان داده‌ها همراه با مثال‌های عملی.",
+      "fileUrl": "files/data-structures.pdf",
+      "fileSize": "8.7 MB"
+    },
+    {
+      "id": 3,
+      "title": "ریاضیات گسسته",
+      "author": "حسین کریمی",
+      "category": "ریاضیات",
+      "year": 1400,
+      "pages": 410,
+      "cover": "https://placehold.co/300x420/dc2626/ffffff?text=Math",
+      "description": "مفاهیم پایه ریاضیات گسسته برای رشته‌های مهندسی.",
+      "fileUrl": "files/discrete-math.pdf",
+      "fileSize": "6.1 MB"
+    },
+    {
+      "id": 4,
+      "title": "شبکه‌های کامپیوتری",
+      "author": "زهرا موسوی",
+      "category": "شبکه",
+      "year": 1403,
+      "pages": 480,
+      "cover": "https://placehold.co/300x420/ea580c/ffffff?text=Network",
+      "description": "آشنایی با مفاهیم شبکه، پروتکل‌ها و امنیت.",
+      "fileUrl": "files/networks.pdf",
+      "fileSize": "7.3 MB"
+    },
+ {
+    "id": 1,
+    "title": "زبان عمومی ۱",
+    "author": "گروه مؤلفان",
+    "category": "زبان انگلیسی",
+    "cover": "assets/placeholder-cover.png",
+    "viewUrl": "https://drive.google.com/file/d/1kh2jMudCEiDmNLCz0mORewjBnJxazKmA/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1kh2jMudCEiDmNLCz0mORewjBnJxazKmA&export=download"
+  }
+  ]
+}

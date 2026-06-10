@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منوی راهنما</title>
+<meta name="description" content="منوی اصلی راهنمای دانشجویان ورودی جدید دانشگاه یزد">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<h1 class="section-title">منوی راهنمای دانشگاه</h1>
+
+<div class="menu-grid">
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='self.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='self.html'">
+    سفارش غذا و سلف دانشگاه
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='library.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='library.html'">
+    کتابخانه
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='dorm.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='dorm.html'">
+    راهنمای خوابگاه
+  </div>
+
+  <div class="menu-item" role="button" tabindex="0"
+       onclick="location.href='guide.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='guide.html'">
+    راهنمای مکانیابی دانشگاه
+  </div>
+
+  <div class="menu-item exit" role="button" tabindex="0"
+       onclick="location.href='index.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='index.html'">
+    خروج
+  </div>
+
+</div>
+
+<script defer src="js/main.js"></script>
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+
+</body>
+</html>
