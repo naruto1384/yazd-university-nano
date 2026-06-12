@@ -16,5 +16,68 @@
     "cover": "assets/2.webp",
     "viewUrl": "https://drive.google.com/file/d/1YuM50SR4hb0W13PVyz0UY3XShMVK2p0V/preview",
     "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1YuM50SR4hb0W13PVyz0UY3XShMVK2p0V&export=download"
+  },
+   {
+    "id": 1,
+    "title": "اموزش پایتون",
+    "author": "گروه مؤلفان",
+    "category": "کتاب پایتون",
+    "cover": "assets/3.webp",
+    "viewUrl": "https://drive.google.com/file/d/1mHb3oYbVFWO7NCw4YcF3b54RfpGRhF_w/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1mHb3oYbVFWO7NCw4YcF3b54RfpGRhF_w&export=download"
+  },
+     {
+    "id": 1,
+    "title": "نظریه الکترومغناطیس میلفورد",
+    "author": "گروه مؤلفان",
+    "category": "الکترومغناطیس",
+    "cover": "assets/4.webp",
+    "viewUrl": "https://drive.google.com/file/d/1MxLZ5Ikg15SJN1en3zOQUwINtJwwJ-rQ/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1MxLZ5Ikg15SJN1en3zOQUwINtJwwJ-rQ&export=download"
+  },
+   {
+    "id": 1,
+    "title": "فیزیک 1",
+    "author": "هالیدی",
+    "category": "فیزیک هالیدی 1",
+    "cover": "assets/5.webp",
+    "viewUrl": "https://drive.google.com/file/d/13sYi42ZcO0rgnlp34PvvsujLD0dkUpBj/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=13sYi42ZcO0rgnlp34PvvsujLD0dkUpBj&export=download"
+  },
+   {
+    "id": 1,
+    "title": "فیزیک 1(حل المسائل)",
+    "author": "گروه مؤلفان",
+    "category": "فیزیک هالیدی 1 (حل المسائل)",
+    "cover": "assets/5.webp",
+    "viewUrl": "https://drive.google.com/file/u/4/d/1FfKXkeZBj4SMFYp_UGdFUH5mS6SUmeL4/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1FfKXkeZBj4SMFYp_UGdFUH5mS6SUmeL4&export=download"
+  },
+   {
+    "id": 1,
+    "title": "فیزیک 2(حل المسائل)",
+    "author": "گروه مؤلفان",
+    "category": "فیزیک هالیدی 2 (حل المسائل)",
+    "cover": "assets/6.webp",
+    "viewUrl": "https://drive.google.com/file/u/4/d/1PajGHQGzcPatrLeovgnCITdxh6xvw-U2/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1PajGHQGzcPatrLeovgnCITdxh6xvw-U2&export=download"
+  },
+   {
+    "id": 1,
+    "title": "فیزیک 2",
+    "author": "گروه مؤلفان",
+    "category": "فیزیک هالیدی 2 ",
+    "cover": "assets/6.webp",
+    "viewUrl": "https://drive.google.com/file/d/1f-90j5C3176dOIQUiWlZgFddjkfKkuLc/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=1f-90j5C3176dOIQUiWlZgFddjkfKkuLc&export=download"
+  },
+   {
+    "id": 1,
+    "title": "فیزیک 3,4",
+    "author": "گروه مؤلفان",
+    "category": "فیزیک هالیدی 3,4 ",
+    "cover": "assets/7.webp",
+    "viewUrl": "https://drive.google.com/file/d/16Ykjg7TI_BQRkF9XoTI8J2Bj2wIdTqVj/preview",
+    "downloadUrl": "https://drive.usercontent.google.com/u/4/uc?id=16Ykjg7TI_BQRkF9XoTI8J2Bj2wIdTqVj&export=download"
   }
 ]
