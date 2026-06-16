@@ -344,3 +344,38 @@ body.dark .theme-toggle .icon-sun { display: inline; }
 @media (max-width: 400px) {
   .books-grid { grid-template-columns: 1fr; }
 }
+/* ===== صفحه‌بندی ===== */
+.pagination {
+  margin: 2rem 0 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 36px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+  transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.15s;
+}
+
+.page-btn:hover {
+  background: var(--primary-hover);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.page-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
