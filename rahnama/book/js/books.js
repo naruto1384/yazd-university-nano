@@ -8,6 +8,8 @@ const state = {
   filtered: [],
   category: "all",
   query: "",
+  page: 1,
+  perPage: 8
 };
 
 // المان‌های DOM
@@ -20,6 +22,7 @@ const el = {
   modal: document.getElementById("bookModal"),
   modalOverlay: document.getElementById("modalOverlay"),
   modalBody: document.getElementById("modalBody"),
+  pagination: document.getElementById("pagination")
 };
 
 /* ---------------- تم روشن/تاریک ---------------- */
@@ -74,6 +77,7 @@ function applyFilters() {
     return matchCategory && matchQuery;
   });
 
+  state.page = 1;
   render();
 }
 
@@ -96,16 +100,53 @@ function render() {
     el.grid.innerHTML = "";
     if (el.emptyState) el.emptyState.hidden = false;
     if (el.resultCount) el.resultCount.textContent = "";
+    if (el.pagination) el.pagination.innerHTML = "";
     return;
   }
 
   if (el.emptyState) el.emptyState.hidden = true;
+
   if (el.resultCount)
     el.resultCount.textContent = `${state.filtered.length} منبع یافت شد`;
 
-  el.grid.innerHTML = state.filtered.map(cardTemplate).join("");
+  const start = (state.page - 1) * state.perPage;
+  const end = start + state.perPage;
+  const pageItems = state.filtered.slice(start, end);
+
+  el.grid.innerHTML = pageItems.map(cardTemplate).join("");
+
+  renderPagination();
 }
 
+function renderPagination() {
+  if (!el.pagination) return;
+
+  const totalPages = Math.ceil(state.filtered.length / state.perPage);
+
+  if (totalPages <= 1) {
+    el.pagination.innerHTML = "";
+    return;
+  }
+
+  let buttons = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    buttons += `
+      <button class="page-btn ${i === state.page ? "active" : ""}"
+        onclick="goToPage(${i})">
+        ${i}
+      </button>
+    `;
+  }
+
+  el.pagination.innerHTML = buttons;
+}
+
+function goToPage(page) {
+  state.page = page;
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 function cardTemplate(book) {
   const cover = book.cover || "assets/placeholder-cover.png";
   const viewUrl = book.viewUrl || book.fileUrl || "";
@@ -167,6 +208,8 @@ function closeModal() {
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
