@@ -1,113 +1,568 @@
-// ===== تغییر تم (بدون ذخیره‌سازی) =====
-function toggleTheme() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme') || 'dark';
-  html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-}
+/* =====================================================
+   ULTRA UI ENGINE — ADVANCED EDITION
+   Modular • Premium • Smooth Navigation System
+===================================================== */
 
-// ===== آکاردئون =====
-function toggleContent(id) {
-  const content = document.getElementById(id);
-  if (!content) return;
+(() => {
 
-  const willOpen = !content.classList.contains('active');
+"use strict";
 
-  // بستن سایر آکاردئون‌های باز، به‌جز موارد always-open
-  document.querySelectorAll('.content-box.active').forEach(box => {
-    if (box !== content && !box.classList.contains('always-open')) {
-      setExpanded(box, false);
+/* =====================================================
+   Utils
+===================================================== */
+
+const $  = (s,p=document)=>p.querySelector(s);
+const $$ = (s,p=document)=>[...p.querySelectorAll(s)];
+
+const prefersReduced =
+window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+/* =====================================================
+   THEME SYSTEM
+===================================================== */
+
+function initTheme(){
+
+    const root = document.documentElement;
+
+    const saved =
+    localStorage.getItem("theme");
+
+    if(saved){
+
+        root.setAttribute("data-theme",saved);
     }
-  });
-
-  setExpanded(content, willOpen);
-
-  // اسکرول نرم به محتوا پس از پایان واقعی انیمیشن
-  if (willOpen) {
-    const onEnd = (e) => {
-      if (e.propertyName === 'max-height') {
-        content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        content.removeEventListener('transitionend', onEnd);
-      }
-    };
-    content.addEventListener('transitionend', onEnd);
-  }
 }
 
-// هماهنگ‌سازی کلاس active و وضعیت aria-expanded روی کنترل‌کننده
-function setExpanded(content, expanded) {
-  content.classList.toggle('active', expanded);
-  const controller = document.querySelector(`[aria-controls="${content.id}"]`);
-  if (controller) {
-    controller.setAttribute('aria-expanded', String(expanded));
-  }
+window.toggleTheme = function(){
+
+    const root = document.documentElement;
+
+    const current =
+    root.getAttribute("data-theme") || "dark";
+
+    const next =
+    current === "dark"
+    ? "light"
+    : "dark";
+
+    root.setAttribute("data-theme",next);
+
+    localStorage.setItem("theme",next);
+};
+
+
+/* =====================================================
+   ACCORDION
+===================================================== */
+
+function setExpanded(content,expanded){
+
+    content.classList.toggle("active",expanded);
+
+    const trigger =
+    document.querySelector(
+    `[aria-controls="${content.id}"]`
+    );
+
+    if(trigger){
+
+        trigger.setAttribute(
+        "aria-expanded",
+        String(expanded)
+        );
+    }
 }
 
-// تنظیم وضعیت باز/بسته و هماهنگ‌سازی aria-expanded روی دکمه مربوطه
-function setExpanded(content, expanded) {
-    content.classList.toggle('active', expanded);
+window.toggleContent = function(id){
 
-    // اگر دکمه‌ای با aria-controls این محتوا را کنترل می‌کند، وضعیت را به‌روزرسانی کن
-    const trigger = document.querySelector(`[aria-controls="${content.id}"]`);
-    if (trigger) trigger.setAttribute('aria-expanded', String(expanded));
-}
+    const content =
+    document.getElementById(id);
 
-// ===== مودال تصویر =====
-let lastFocusedEl = null;
+    if(!content) return;
 
-function openImage(img) {
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImg');
-    if (!modal || !modalImg) return;
+    const willOpen =
+    !content.classList.contains("active");
 
-    lastFocusedEl = document.activeElement; // ذخیره فوکوس فعلی برای بازگرداندن بعد از بستن
+    $$(".content-box.active").forEach(box=>{
+
+        if(
+            box!==content &&
+            !box.classList.contains("always-open")
+        ){
+
+            setExpanded(box,false);
+        }
+
+    });
+
+    setExpanded(content,willOpen);
+};
+
+
+/* =====================================================
+   IMAGE MODAL
+===================================================== */
+
+let lastFocused = null;
+
+window.openImage = function(img){
+
+    const modal    = $("#imageModal");
+    const modalImg = $("#modalImg");
+
+    if(!modal || !modalImg) return;
+
+    lastFocused = document.activeElement;
 
     modalImg.src = img.src;
-    modalImg.alt = img.alt || 'تصویر بزرگ‌شده';
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden'; // جلوگیری از اسکرول پس‌زمینه
+    modalImg.alt = img.alt || "";
+
+    modal.classList.add("active");
+
+    document.body.style.overflow="hidden";
 
     modal.focus();
-}
+};
 
-function closeImage() {
-    const modal = document.getElementById('imageModal');
-    if (!modal || !modal.classList.contains('active')) return;
+window.closeImage = function(){
 
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    const modal = $("#imageModal");
 
-    // پاک‌سازی src بعد از پایان انیمیشن خروج
-    const modalImg = document.getElementById('modalImg');
-    if (modalImg) {
-        setTimeout(() => { if (!modal.classList.contains('active')) modalImg.src = ''; }, 300);
+    if(!modal) return;
+
+    modal.classList.remove("active");
+
+    document.body.style.overflow="";
+
+    const modalImg = $("#modalImg");
+
+    if(modalImg){
+
+        setTimeout(()=>{
+            modalImg.src="";
+        },200);
     }
 
-    // بازگرداندن فوکوس به عنصر قبلی
-    if (lastFocusedEl && typeof lastFocusedEl.focus === 'function') {
-        lastFocusedEl.focus();
-        lastFocusedEl = null;
-    }
-}
+    if(lastFocused){
 
-// ===== رویدادهای سراسری =====
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('imageModal');
-    if (modal) {
-        // بستن با کلیک روی پس‌زمینه (نه خود تصویر)
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeImage();
+        lastFocused.focus();
+        lastFocused=null;
+    }
+};
+
+
+/* =====================================================
+   SCROLL REVEAL
+===================================================== */
+
+function initReveal(){
+
+    const elements =
+    $$(".menu-item,.grid-item,.step-card");
+
+    if(!elements.length) return;
+
+    const observer =
+    new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(!entry.isIntersecting) return;
+
+            entry.target.classList.add("reveal");
+
+            observer.unobserve(entry.target);
+
         });
-        // قابلیت فوکوس برای دسترسی‌پذیری
-        modal.setAttribute('tabindex', '-1');
-        modal.setAttribute('role', 'dialog');
-        modal.setAttribute('aria-modal', 'true');
-        modal.setAttribute('aria-hidden', 'true');
+
+    },{
+        threshold:.12
+    });
+
+    elements.forEach(el=>observer.observe(el));
+}
+
+
+/* =====================================================
+   MAGNETIC 3D EFFECT
+===================================================== */
+
+function initMagnetic(){
+
+    if(prefersReduced) return;
+
+    const elements =
+    $$(".menu-item,.btn-start,.theme-toggle");
+
+    elements.forEach(el=>{
+
+        el.addEventListener("mousemove",e=>{
+
+            const r =
+            el.getBoundingClientRect();
+
+            const x =
+            (e.clientX-r.left)/r.width-.5;
+
+            const y =
+            (e.clientY-r.top)/r.height-.5;
+
+            el.style.transform =
+            `
+            rotateX(${ -y*8 }deg)
+            rotateY(${ x*8 }deg)
+            scale(1.03)
+            `;
+        });
+
+        el.addEventListener("mouseleave",()=>{
+
+            el.style.transform="";
+        });
+
+    });
+}
+
+
+/* =====================================================
+   CURSOR SPOTLIGHT
+===================================================== */
+
+function initSpotlight(){
+
+    if(prefersReduced) return;
+
+    const glow =
+    document.createElement("div");
+
+    glow.className = "cursor-spotlight";
+
+    Object.assign(glow.style,{
+
+        position:"fixed",
+        width:"320px",
+        height:"320px",
+        borderRadius:"50%",
+        pointerEvents:"none",
+        zIndex:"0",
+
+        background:
+        "radial-gradient(circle, rgba(251,191,36,.15), transparent 60%)",
+
+        filter:"blur(55px)",
+        transform:"translate(-50%,-50%)"
+
+    });
+
+    document.body.appendChild(glow);
+
+    window.addEventListener("mousemove",e=>{
+
+        glow.style.left = e.clientX+"px";
+        glow.style.top  = e.clientY+"px";
+
+    },{passive:true});
+}
+
+
+/* =====================================================
+   LAZY LOAD IMAGES
+===================================================== */
+
+function initLazyImages(){
+
+    const imgs =
+    $$("img[data-src]");
+
+    if(!imgs.length) return;
+
+    const observer =
+    new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(!entry.isIntersecting) return;
+
+            const img = entry.target;
+
+            img.src = img.dataset.src;
+
+            img.removeAttribute("data-src");
+
+            observer.unobserve(img);
+
+        });
+
+    },{
+        rootMargin:"250px"
+    });
+
+    imgs.forEach(img=>observer.observe(img));
+}
+
+
+/* =====================================================
+   GPU BOOST
+===================================================== */
+
+function enableGPU(){
+
+    const els =
+    $$(".menu-item,.grid-item,.step-card,.btn-start");
+
+    els.forEach(el=>{
+
+        el.style.willChange="transform";
+        el.style.transform="translateZ(0)";
+
+    });
+}
+
+
+/* =====================================================
+   PAGE REVEAL
+===================================================== */
+
+function initPageReveal(){
+
+    document.body.classList.add("page-enter");
+
+    window.addEventListener("load",()=>{
+
+        requestAnimationFrame(()=>{
+
+            document.body.classList.remove("page-enter");
+
+        });
+
+    });
+}
+
+
+/* =====================================================
+   PAGE TRANSITIONS
+===================================================== */
+
+function initPageTransitions(){
+
+    if(prefersReduced) return;
+
+    document.addEventListener("click",e=>{
+
+        const link =
+        e.target.closest("a");
+
+        if(!link) return;
+
+        const href = link.getAttribute("href");
+
+        if(
+            !href ||
+            href.startsWith("#") ||
+            href.startsWith("javascript:") ||
+            link.target === "_blank"
+        ) return;
+
+        e.preventDefault();
+
+        document.body.classList.add("page-leave");
+
+        setTimeout(()=>{
+
+            window.location.href = href;
+
+        },350);
+
+    });
+}
+
+
+/* =====================================================
+   SMOOTH ROUTER
+===================================================== */
+
+function initSmoothRouter(){
+
+    window.addEventListener("popstate",()=>{
+
+        document.body.animate([
+            {
+                opacity:.7,
+                transform:"translateY(8px)"
+            },
+            {
+                opacity:1,
+                transform:"translateY(0)"
+            }
+        ],{
+            duration:400,
+            easing:"ease"
+        });
+
+    });
+
+}
+
+
+/* =====================================================
+   VIEW ANIMATIONS
+===================================================== */
+
+function initViewAnimations(){
+
+    if(prefersReduced) return;
+
+    const sections =
+    $$("section,.menu-item,.step-card");
+
+    const observer =
+    new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.animate([
+                    {
+                        opacity:0,
+                        transform:
+                        "translateY(30px) scale(.98)"
+                    },
+                    {
+                        opacity:1,
+                        transform:
+                        "translateY(0) scale(1)"
+                    }
+                ],{
+                    duration:700,
+                    easing:
+                    "cubic-bezier(.22,.61,.36,1)",
+                    fill:"forwards"
+                });
+
+                observer.unobserve(entry.target);
+            }
+
+        });
+
+    },{
+        threshold:.08
+    });
+
+    sections.forEach(el=>observer.observe(el));
+}
+
+
+/* =====================================================
+   ANALYTICS HOOKS
+===================================================== */
+
+function initAnalyticsHooks(){
+
+    /* page view */
+
+    console.log(
+    "[Analytics] Page View:",
+    location.pathname
+    );
+
+    /* clicks */
+
+    document.addEventListener("click",e=>{
+
+        const target =
+        e.target.closest(
+        "a,button,.menu-item,.btn-start"
+        );
+
+        if(!target) return;
+
+        console.log(
+        "[Analytics] Click:",
+        {
+            text:
+            target.innerText?.trim(),
+            class:
+            target.className
+        }
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   MODAL EVENTS
+===================================================== */
+
+function initModalEvents(){
+
+    const modal = $("#imageModal");
+
+    if(!modal) return;
+
+    modal.setAttribute("tabindex","-1");
+
+    modal.addEventListener("click",e=>{
+
+        if(e.target===modal){
+
+            closeImage();
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener("keydown",e=>{
+
+    if(e.key==="Escape"){
+
+        closeImage();
     }
+
 });
 
-// بستن مودال با کلید Escape
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeImage();
+
+/* =====================================================
+   INIT ENGINE
+===================================================== */
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+    initTheme();
+
+    initReveal();
+
+    initMagnetic();
+
+    initSpotlight();
+
+    initLazyImages();
+
+    enableGPU();
+
+    initPageReveal();
+
+    initPageTransitions();
+
+    initSmoothRouter();
+
+    initViewAnimations();
+
+    initAnalyticsHooks();
+
+    initModalEvents();
+
 });
+
+
+})();
