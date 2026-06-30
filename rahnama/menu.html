@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>منوی راهنما</title>
+
+  <meta
+    name="description"
+    content="منوی اصلی راهنمای دانشجویان ورودی جدید دانشگاه یزد"
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="menu-page">
+
+  <header class="page-header glass-nav" aria-label="نوار بالای صفحه">
+    <a href="index.html" class="back-btn" aria-label="بازگشت به صفحه شروع">
+      ← بازگشت
+    </a>
+
+    <button
+      type="button"
+      class="theme-toggle c-theme-toggle"
+      data-theme-toggle
+      aria-label="تغییر تم"
+      aria-pressed="false"
+      onclick="toggleTheme()"
+    >
+      <span class="icon-moon" aria-hidden="true">🌙</span>
+      <span class="icon-sun" aria-hidden="true">☀️</span>
+    </button>
+  </header>
+
+  <main class="menu-container" aria-labelledby="menu-title">
+
+    <section class="menu-hero">
+      <h1 id="menu-title" class="section-title">
+        منوی راهنمای دانشگاه
+      </h1>
+    </section>
+
+    <nav class="menu-grid" aria-label="منوی اصلی راهنمای دانشگاه">
+
+      <a class="menu-item premium-border" href="self.html">
+        <span class="menu-item-text">سفارش غذا و سلف دانشگاه</span>
+      </a>
+
+      <a class="menu-item premium-border" href="library.html">
+        <span class="menu-item-text">کتابخانه</span>
+      </a>
+
+      <a class="menu-item premium-border" href="book/index.html">
+        <span class="menu-item-text">📚 دانلود کتاب‌های مورد نیاز</span>
+      </a>
+
+      <a class="menu-item premium-border" href="teacher-rating/index.html">
+        <span class="menu-item-text">راهنمای اساتید</span>
+      </a>
+
+      <a class="menu-item premium-border" href="dorm.html">
+        <span class="menu-item-text">راهنمای خوابگاه</span>
+      </a>
+
+      <a class="menu-item premium-border" href="guide.html">
+        <span class="menu-item-text">راهنمای مکانیابی دانشگاه</span>
+      </a>
+
+      <a class="menu-item exit premium-border" href="index.html">
+        <span class="menu-item-text">خروج</span>
+      </a>
+
+    </nav>
+
+  </main>
+
+  <script defer src="js/main.js"></script>
+
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme === "light") {
+        root.setAttribute("data-theme", "light");
+      } else {
+        root.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+
+</body>
+</html>

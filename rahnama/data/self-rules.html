@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قوانین سلف دانشگاه یزد</title>
+<meta name="description" content="قوانین و نکات سلف دانشگاه یزد: ساعات کار، کد فراموشی، سبد غذایی و قیمت‌ها">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="self-page">
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<h1 class="section-title">قوانین و نکات سلف</h1>
+
+<div class="menu-grid">
+
+  <div class="content-box always-open">
+    <h3>۱. ساعات کار سلف‌ها</h3>
+    <p>صبحانه: ۶ تا ۸ | نهار: ۱۱:۳۰ تا ۱۴ | شام: ۱۸:۳۰ تا ۲۰:۴۵</p>
+
+    <h3>۲. کد فراموشی</h3>
+    <p>در صورت عدم توانایی در دریافت غذا، می‌توانید در سایت کالینان «کد فراموشی» بگیرید و به دوستتان بدهید. دو بار در ماه رایگان است و برای دفعات بعد ۲ هزار تومان هزینه دارد.</p>
+
+    <h3>۳. خرید روز فروش غذا</h3>
+    <p>نیم ساعت پس از شروع سرو غذا، می‌توانید در سایت کالینان در بخش «خرید روز»، با قیمت بالاتر غذا تهیه کنید.</p>
+
+    <h3>۴. سبد غذایی</h3>
+    <p>اگر از گرفتن غذا منصرف شدید یا زمان ۴۸ ساعت گذشته بود، از طریق «سبد غذایی» سایت کالینان می‌توانید وعده خود را به دیگران بفروشید یا از دیگران بخرید. توجه کنید که فروش وابسته به تقاضای دیگران است.</p>
+
+    <h3>۵. مدت زمان تغییر یا لغو غذا</h3>
+    <p>تا ۴۸ ساعت قبل از وعده، امکان لغو یا تغییر وجود دارد و وجه کامل به حساب شما برمی‌گردد.</p>
+
+    <h3>۶. انتخاب سلف هنگام خرید</h3>
+    <p>سلف شرقی مخصوص خوابگاه است و سلف آفتاب در دانشگاه قرار دارد. در انتخاب سلف دقت کنید، چون تغییر آن پس از ثبت‌نام دشوار است.</p>
+
+    <h3>۷. قیمت غذا</h3>
+    <p>قیمت‌ها ممکن است تغییر کنند، اما در حال حاضر:</p>
+    <ul>
+      <li>غذاهای کم‌هزینه: ۱۱ هزار تومان</li>
+      <li>غذاهای متوسط: ۱۷ هزار تومان</li>
+      <li>غذاهای پرهزینه: ۲۲ هزار تومان</li>
+    </ul>
+  </div>
+
+  <div class="menu-item back-btn" role="button" tabindex="0"
+       onclick="location.href='self.html'"
+       onkeydown="if(event.key==='Enter'||event.key===' ')location.href='self.html'">
+    بازگشت به صفحه قبل
+  </div>
+
+</div>
+
+<script defer src="js/main.js"></script>
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+
+</body>
+</html>

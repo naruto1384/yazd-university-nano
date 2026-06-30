@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>راهنمای دانشجو</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- اجسام دکوراتیو اتمسفری (GPU-accelerated) -->
+  <div class="c-atmosphere" aria-hidden="true">
+    <span class="c-atmosphere__body c-atmosphere__body--1"></span>
+    <span class="c-atmosphere__body c-atmosphere__body--2"></span>
+    <span class="c-atmosphere__body c-atmosphere__body--3"></span>
+  </div>
+
+  <div class="l-page">
+    <div class="l-container">
+
+      <!-- هدر + سوییچ تم -->
+      <header class="l-header u-flex u-items-center u-justify-between">
+        <h1 class="u-text-xl">پورتال راهنمای دانشجو</h1>
+
+        <button
+          type="button"
+          class="c-theme-toggle"
+          id="themeToggle"
+          aria-label="تغییر حالت روشن و تاریک"
+          aria-pressed="false">
+          <span class="c-theme-toggle__thumb"></span>
+          <span class="c-theme-toggle__icon c-theme-toggle__icon--sun" aria-hidden="true">☀️</span>
+          <span class="c-theme-toggle__icon c-theme-toggle__icon--moon" aria-hidden="true">🌙</span>
+        </button>
+      </header>
+
+      <!-- HERO -->
+      <section class="c-hero">
+        <div class="c-hero__content">
+          <h2 class="c-hero__title">به مرکز راهنمایی خوش آمدی</h2>
+          <p class="c-hero__subtitle">
+            هر چیزی که برای ثبت‌نام، انتخاب واحد و امور آموزشی نیاز داری، اینجاست.
+          </p>
+          <div class="c-hero__actions u-flex u-gap-md">
+            <button class="c-btn c-btn--primary c-frame">شروع کن</button>
+            <button class="c-btn c-btn--ghost c-frame">راهنمای کامل</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- جستجو -->
+      <section class="c-search c-frame">
+        <input
+          type="search"
+          class="c-search__input"
+          placeholder="جستجو در راهنما..."
+          aria-label="جستجو">
+        <button class="c-search__btn c-btn c-btn--primary">جستجو</button>
+      </section>
+
+      <!-- تب‌ها -->
+      <nav class="c-tabs" role="tablist" aria-label="بخش‌ها">
+        <button class="c-tabs__tab is-active" role="tab" aria-selected="true">آموزشی</button>
+        <button class="c-tabs__tab" role="tab" aria-selected="false">مالی</button>
+        <button class="c-tabs__tab" role="tab" aria-selected="false">رفاهی</button>
+      </nav>
+
+      <!-- شبکه‌ی کارت‌ها -->
+      <section class="l-grid">
+        <article class="c-card c-frame">
+          <h3 class="c-card__title">انتخاب واحد</h3>
+          <p class="c-card__body">بازه‌ی انتخاب واحد و حذف و اضافه را اینجا ببین.</p>
+          <span class="c-badge c-badge--success">فعال</span>
+        </article>
+
+        <article class="c-card c-frame">
+          <h3 class="c-card__title">شهریه</h3>
+          <p class="c-card__body">وضعیت پرداخت و اقساط را پیگیری کن.</p>
+          <span class="c-badge c-badge--warning">در انتظار</span>
+        </article>
+
+        <article class="c-card c-frame">
+          <h3 class="c-card__title">خوابگاه</h3>
+          <p class="c-card__body">
+            درخواست اسکان
+            <span class="c-tooltip" data-tip="ظرفیت محدود است">
+              <span class="c-tooltip__trigger" tabindex="0">ⓘ</span>
+            </span>
+          </p>
+          <span class="c-badge c-badge--danger">بسته</span>
+        </article>
+      </section>
+
+      <!-- هشدارها -->
+      <section class="u-stack u-gap-sm">
+        <div class="c-alert c-alert--info" role="status">
+          مهلت انتخاب واحد تا پایان هفته تمدید شد.
+        </div>
+        <div class="c-alert c-alert--success" role="status">
+          ثبت‌نام شما با موفقیت انجام شد.
+        </div>
+      </section>
+
+      <!-- آکاردئون -->
+      <section class="c-accordion">
+        <details class="c-accordion__item" open>
+          <summary class="c-accordion__header c-frame">چطور انتخاب واحد کنم؟</summary>
+          <div class="c-accordion__panel">
+            <p>وارد سامانه شو، از منوی آموزش گزینه انتخاب واحد را بزن.</p>
+          </div>
+        </details>
+        <details class="c-accordion__item">
+          <summary class="c-accordion__header c-frame">رمز عبورم را فراموش کردم</summary>
+          <div class="c-accordion__panel">
+            <p>از صفحه ورود روی «فراموشی رمز» بزن و کد ملی را وارد کن.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- فرم -->
+      <section class="c-form c-frame">
+        <h3 class="c-form__title">ارسال درخواست</h3>
+        <div class="c-form__group">
+          <label class="c-form__label" for="name">نام و نام خانوادگی</label>
+          <input class="c-form__input" id="name" type="text">
+        </div>
+        <div class="c-form__group">
+          <label class="c-form__label" for="msg">شرح درخواست</label>
+          <textarea class="c-form__input" id="msg" rows="4"></textarea>
+        </div>
+        <button class="c-btn c-btn--primary" type="submit">ثبت درخواست</button>
+      </section>
+
+      <!-- دکمه‌ی باز کردن مودال -->
+      <button class="c-btn c-btn--ghost" id="openModal" type="button">نمایش مودال</button>
+
+    </div>
+  </div>
+
+  <!-- مودال -->
+  <div class="c-modal" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="c-modal__overlay" data-close></div>
+    <div class="c-modal__dialog c-frame">
+      <h3 class="c-modal__title" id="modalTitle">تأیید عملیات</h3>
+      <p class="c-modal__body">آیا از انn--ghost" data-close>انصراف</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // سوییactions u-flex u-gap-md">
+        <button class="c-btn c-btn--primary" data-close>بله</button>
+        <button class="c-btn c-btn--ghost" data-close>انصراف</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // سوییچ تم
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    toggle.addEventListener('click', () => {
+      const dark = root.getAttribute('data-theme') === 'dark';
+      root.setAttribute('data-theme', dark ? 'light' : 'dark');
+      toggle.setAttribute('aria-pressed', String(!dark));
+    });
+
+    // مودال
+    const modal = document.getElementById('demoModal');
+    document.getElementById('openModal').addEventListener('click', () => modal.hidden = false);
+    modal.addEventListener('click', (e) => {
+      if (e.target.hasAttribute('data-close')) modal.hidden = true;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') modal.hidden = true;
+    });
+
+    // تب‌ها
+    document.querySelectorAll('.c-tabs__tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.c-tabs__tab').forEach(t => {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+      });
+    });
+  </script>
+</body>
+</html>

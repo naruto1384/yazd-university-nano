@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>مراحل جستجوی کتاب</title>
+
+<meta
+name="description"
+content="راهنمای تصویری مراحل جستجوی کتاب در سامانه کتابخانه"
+>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+
+<body class="guide-page gallery-page">
+
+
+<header class="page-header glass-nav">
+
+<a href="library.html" class="back-btn">
+بازگشت
+</a>
+
+<button
+class="theme-toggle"
+data-theme-toggle
+onclick="toggleTheme()"
+aria-label="تغییر تم"
+>
+<span class="icon-moon">🌙</span>
+<span class="icon-sun">☀️</span>
+</button>
+
+</header>
+
+
+
+<main class="gallery-container">
+
+<h1 class="section-title">
+مراحل جستجوی کتاب در سامانه
+</h1>
+
+
+
+<section class="gallery-grid">
+
+<img
+src="images/1.jpg"
+alt="مرحله ۱ جستجوی کتاب"
+loading="lazy"
+onclick="openImage(this)"
+>
+
+<img
+src="images/2.jpg"
+alt="مرحله ۲ جستجوی کتاب"
+loading="lazy"
+onclick="openImage(this)"
+>
+
+<img
+src="images/3.jpg"
+alt="مرحله ۳ جستجوی کتاب"
+loading="lazy"
+onclick="openImage(this)"
+>
+
+<img
+src="images/4.jpg"
+alt="مرحله ۴ جستجوی کتاب"
+loading="lazy"
+onclick="openImage(this)"
+>
+
+</section>
+
+
+
+<a
+href="library.html"
+class="menu-item back-btn gallery-back-btn"
+>
+
+بازگشت به صفحه راهنما
+
+</a>
+
+
+
+</main>
+
+
+
+<div
+id="imageModal"
+class="image-modal"
+aria-hidden="true"
+>
+
+<img id="modalImg" alt="">
+
+</div>
+
+
+
+<script defer src="js/main.js"></script>
+
+</body>
+</html>

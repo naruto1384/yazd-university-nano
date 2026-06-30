@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>راهنمای مکانیابی دانشگاه</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="guide-page">
+
+<button class="theme-toggle" id="themeToggle" aria-label="تغییر تم">🌙</button>
+
+<h1 class="section-title">راهنمای مکانیابی دانشگاه</h1>
+
+<div class="menu-grid">
+    
+    <div class="content-box always-open">
+        <p>به بخش راهنمای جامع دانشگاه خوش آمدید. در این صفحه، نقشه‌ای دقیق و کاربردی از تمامی ساختمان‌ها، دانشکده‌ها و اماکن رفاهی دانشگاه در اختیار شما قرار می‌گیرد تا بتوانید به‌راحتی مسیر خود را پیدا کنید.</p>
+        
+        <p><b>توجه:</b> این بخش در حال حاضر در دست توسعه و تکمیل است. تمام تلاش ما بر این است تا اطلاعات دقیق و به‌روزی را برای شما فراهم کنیم؛ بنابراین اگر در بخشی نقص یا کمبودی مشاهده کردید، پیشاپیش از شکیبایی شما سپاسگزاریم.</p>
+        
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <p>برای مشاهده نقشه و سامانه مکانیابی، از دکمه زیر استفاده کنید:</p>
+        
+        <div class="grid-item" onclick="window.open('آدرس_پروژه_دیگر', '_blank', 'noopener,noreferrer')" 
+             style="background: #2563eb; color: white; border: none; cursor: pointer; text-align: center; padding: 15px; border-radius: 10px;">
+            ورود به سامانه مکانیابی
+        </div>
+    </div>
+
+    <div class="grid-item back-btn" onclick="location.href='menu.html'" style="cursor:pointer; text-align:center;">
+        بازگشت به منوی اصلی
+    </div>
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '🌙' : '☀️';
+  });
+</script>
+
+</body>
+</html>
