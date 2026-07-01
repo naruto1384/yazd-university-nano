@@ -12,7 +12,6 @@
   />
 
   <link rel="stylesheet" href="css/style.css" />
-  <script src="js/app.js" defer></script>
 </head>
 <body class="teachers-page">
 
@@ -76,7 +75,7 @@
           <label for="pageSizeSelect" class="toolbar__label">تعداد در صفحه</label>
           <select id="pageSizeSelect" class="toolbar__select">
             <option value="6">۶</option>
-            <option value="9">۹</option>
+            <option value="9" selected>۹</option>
             <option value="12">۱۲</option>
           </select>
         </div>
@@ -110,19 +109,19 @@
       </div>
 
       <!-- حالت لودینگ -->
-      <div id="loadingState" class="state state--loading" aria-live="polite">
+      <div id="loadingState" class="state state--loading hidden" aria-live="polite">
         <span class="state__spinner" aria-hidden="true"></span>
         <span class="state__text">در حال بارگذاری اطلاعات اساتید...</span>
       </div>
 
       <!-- حالت خطا -->
-      <div id="errorState" class="state state--error" role="alert">
+      <div id="errorState" class="state state--error hidden" role="alert">
         <span class="state__icon" aria-hidden="true">⚠️</span>
         <span class="state__text">خطا در بارگذاری اطلاعات. لطفاً صفحه را دوباره بارگذاری کنید.</span>
       </div>
 
       <!-- حالت خالی -->
-      <div id="emptyState" class="state state--empty">
+      <div id="emptyState" class="state state--empty hidden">
         <span class="state__icon" aria-hidden="true">🔍</span>
         <span class="state__text">استادی با این مشخصات یافت نشد.</span>
       </div>
@@ -133,14 +132,14 @@
       </div>
 
       <!-- صفحه‌بندی -->
-      <nav id="pagination" class="pagination" aria-label="صفحه‌بندی اساتید">
+      <nav id="pagination" class="pagination hidden" aria-label="صفحه‌بندی اساتید">
         <!-- دکمه‌ها و شماره صفحات توسط JS ساخته می‌شوند -->
       </nav>
     </section>
   </main>
 
-  <!-- مودال جزئیات استاد -->
-  <div id="teacherModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+  <!-- مودال جزئیات استاد و ثبت نظر -->
+  <div id="teacherModal" class="modal hidden" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
     <div class="modal__overlay" data-close aria-hidden="true"></div>
 
     <div class="modal__content">
@@ -180,7 +179,45 @@
           <!-- آیتم‌های لیست توسط JS ساخته می‌شوند -->
         </ul>
       </div>
+
+     
+       <div class="modal__rating-section" id="ratingSection">
+  <h3 class="modal__rating-title">امتیاز شما</h3>
+  
+  <div class="star-rating" id="starRating">
+    <span class="star-rating__star" data-rating="1">⭐</span>
+    <span class="star-rating__star" data-rating="2">⭐</span>
+    <span class="star-rating__star" data-rating="3">⭐</span>
+    <span class="star-rating__star" data-rating="4">⭐</span>
+    <span class="star-rating__star" data-rating="5">⭐</span>
+  </div>
+  
+  <p class="star-rating__hint">روی ستاره‌ها کلیک کنید</p>
+  
+  <div class="modal__comment-group">
+    <label class="modal__comment-label" for="userComment">
+      نظر خود را بنویسید
+    </label>
+    <textarea 
+      id="userComment" 
+      class="modal__comment-input"
+      placeholder="تجربه خود از این استاد را با دیگران به اشتراک بگذارید..."
+      maxlength="500"
+    ></textarea>
+    <div class="modal__comment-counter">
+      <span id="charCount">0</span> / 500
     </div>
+  </div>
+  
+  <button class="modal__submit-button" id="submitRating">
+    ثبت امتیاز
+  </button>
+  
+  <div class="modal__success-message" id="successMessage">
+    ✅ امتیاز شما با موفقیت ثبت شد!
+  </div>
+</div>
+
   </div>
 
   <!-- قالب کارت استاد -->
@@ -194,21 +231,11 @@
 
         <div class="teacher-card__rating-box">
           <span class="teacher-card__rating-star" aria-hidden="true">★</span>
-          <span class="teacher-card__rating-value"></span>
+          <span class="teacher-card__score"></span>
         </div>
       </div>
 
       <div class="teacher-card__body">
-        <div class="teacher-card__row">
-          <span class="teacher-card__label">دروس:</span>
-          <span class="teacher-card__courses"></span>
-        </div>
-
-        <div class="teacher-card__row">
-          <span class="teacher-card__label">تعداد نظرات:</span>
-          <span class="teacher-card__reviews"></span>
-        </div>
-
         <div class="teacher-card__row">
           <span class="teacher-card__label">سختی کلاس:</span>
           <span class="teacher-card__difficulty badge"></span>
@@ -217,6 +244,11 @@
         <div class="teacher-card__row">
           <span class="teacher-card__label">حضور و غیاب:</span>
           <span class="teacher-card__attendance badge"></span>
+        </div>
+
+        <div class="teacher-card__row">
+          <span class="teacher-card__label">تعداد نظرات:</span>
+          <span class="teacher-card__reviews"></span>
         </div>
       </div>
 
@@ -227,6 +259,7 @@
       </div>
     </article>
   </template>
+
   <!-- فوتر -->
   <footer class="page-footer">
     <div class="container">
@@ -236,5 +269,6 @@
     </div>
   </footer>
 
+  <script src="js/app.js"></script>
 </body>
 </html>
