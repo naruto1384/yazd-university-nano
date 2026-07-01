@@ -6,6 +6,25 @@
 "use strict";
 
 /* ------------------------------
+   تنظیمات Supabase
+------------------------------ */
+const SUPABASE_URL = "https://suxuwbqjfuozahbdmbol.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_A3-m3J9kIcl1SEyvXd1HGw_VSql7OB6";
+const SUPABASE_REST_URL = `${SUPABASE_URL}/rest/v1`;
+
+/* ------------------------------
+   شناسه دستگاه (Device ID)
+------------------------------ */
+function getDeviceId() {
+  let deviceId = localStorage.getItem("device_id");
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem("device_id", deviceId);
+  }
+  return deviceId;
+}
+
+/* ------------------------------
    وضعیت برنامه
 ------------------------------ */
 const state = {
@@ -15,6 +34,9 @@ const state = {
   department: "all",
   pageSize: 9,
   currentPage: 1,
+  selectedRating: 0,
+  currentTeacher: null,
+  existingUserRating: null,
 };
 
 /* ------------------------------
@@ -48,20 +70,24 @@ const els = {
   modalCoursesList: document.getElementById("modalCoursesList"),
   modalDescription: document.getElementById("modalDescription"),
 
+  // امتیازدهی
+  ratingStars: document.querySelectorAll(".star-rating__star"),
+  userComment: document.getElementById("userComment"),
+  submitRating: document.getElementById("submitRating"),
 };
 
 /* ------------------------------
    نگاشت کلاس badge برای سختی و حضورغیاب
 ------------------------------ */
 const difficultyClass = {
-  "آسان": "badge--success",
-  "متوسط": "badge--warning",
-  "سخت": "badge--danger",
+  آسان: "badge--success",
+  متوسط: "badge--warning",
+  سخت: "badge--danger",
 };
 
 const attendanceClass = {
-  "آزاد": "badge--success",
-  "معمولی": "badge--warning",
+  آزاد: "badge--success",
+  معمولی: "badge--warning",
   "سخت‌گیر": "badge--danger",
 };
 
@@ -76,7 +102,6 @@ function setText(el, value) {
   if (el) el.textContent = value ?? "";
 }
 
-// نمایش امن امتیاز با یک رقم اعشار (به فارسی)
 function formatScore(score) {
   const n = Number(score) || 0;
   return n.toFixed(1).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
@@ -92,7 +117,6 @@ function hide(el) {
   if (el) el.classList.remove("is-visible");
 }
 
-// مخفی کردن همه حالت‌ها
 function hideAllStates() {
   hide(els.loadingState);
   hide(els.errorState);
@@ -132,23 +156,134 @@ function toggleTheme() {
 }
 
 /* ------------------------------
-   بارگذاری داده‌ها
+   مدیریت ستاره‌های امتیازدهی
+------------------------------ */
+function highlightStars(rating) {
+  els.ratingStars.forEach((star, idx) => {
+    star.classList.toggle("active", idx < rating);
+  });
+}
+
+function setupStarRating() {
+  els.ratingStars.forEach((star, idx) => {
+    star.addEventListener("click", () => {
+      state.selectedRating = idx + 1;
+      highlightStars(state.selectedRating);
+    });
+  });
+}
+
+/* ------------------------------
+   بارگذاری امتیاز قبلی کاربر
+------------------------------ */
+async function loadUserRating(teacherId) {
+  const deviceId = getDeviceId();
+  const url = `${SUPABASE_REST_URL}/student_ratings?teacher_id=eq.${teacherId}&device_id=eq.${deviceId}&select=score,comment`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
+}
+
+/* ------------------------------
+   ارسال/ویرایش امتیاز
+------------------------------ */
+async function submitRating() {
+  if (!state.currentTeacher) return;
+
+  const teacherId = state.currentTeacher.id;
+  const deviceId = getDeviceId();
+  const score = state.selectedRating;
+  const comment = els.userComment.value.trim();
+
+  if (!score) {
+    alert("لطفاً امتیاز را انتخاب کنید.");
+    return;
+  }
+
+  const method = state.existingUserRating ? "PATCH" : "POST";
+  const url = state.existingUserRating
+    ? `${SUPABASE_REST_URL}/student_ratings?teacher_id=eq.${teacherId}&device_id=eq.${deviceId}`
+    : `${SUPABASE_REST_URL}/student_ratings`;
+
+  const body = { teacher_id: teacherId, device_id: deviceId, score, comment };
+
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) throw new Error("خطا در ثبت امتیاز");
+
+    alert(
+      state.existingUserRating ? "امتیاز شما ویرایش شد." : "امتیاز شما ثبت شد."
+    );
+    closeModal();
+    await loadTeachers();
+  } catch (err) {
+    console.error(err);
+    alert("خطا در ثبت امتیاز.");
+  }
+}
+
+/* ------------------------------
+   بارگذاری داده‌ها از Supabase
 ------------------------------ */
 async function loadTeachers() {
   showLoading(true);
 
   try {
-    const res = await fetch("data/teachers.json");
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const url = `${SUPABASE_REST_URL}/teachers?select=*`;
+
+    const res = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
 
     const data = await res.json();
-    state.teachers = Array.isArray(data) ? data : (data.teachers || []);
+
+    state.teachers = data.map((t) => ({
+      id: t.id,
+      name: t.name,
+      department: t.department,
+      courses: t.courses || [],
+      difficulty: t.difficulty_level,
+      attendance: t.attendance_policy,
+      description: t.description,
+      rating: t.rating || 0,
+      reviewsCount: t.reviews_count || 0,
+      totalScoreSum: t.total_score_sum || 0,
+    }));
 
     showLoading(false);
     populateDepartments();
     applyFilters();
   } catch (err) {
-    console.error("خطا در بارگذاری اساتید:", err);
+    console.error("خطا در بارگذاری اساتید از Supabase:", err);
     hideAllStates();
     els.grid.innerHTML = "";
     hide(els.pagination);
@@ -160,257 +295,316 @@ async function loadTeachers() {
    پر کردن فیلتر گروه‌ها
 ------------------------------ */
 function populateDepartments() {
-  const departments = [
-    ...new Set(state.teachers.map((t) => t.department).filter(Boolean)),
-  ].sort((a, b) => a.localeCompare(b, "fa"));
+  const unique = [...new Set(state.teachers.map((t) => t.department))].sort();
 
-  const fragment = document.createDocumentFragment();
-  departments.forEach((dep) => {
+  const currentVal = els.departmentFilter.value;
+  els.departmentFilter.innerHTML = '<option value="all">همه گروه‌ها</option>';
+
+  unique.forEach((dep) => {
     const opt = document.createElement("option");
     opt.value = dep;
     opt.textContent = dep;
-    fragment.appendChild(opt);
+    els.departmentFilter.appendChild(opt);
   });
-  els.departmentFilter.appendChild(fragment);
+
+  if (unique.includes(currentVal)) {
+    els.departmentFilter.value = currentVal;
+  } else {
+    els.departmentFilter.value = "all";
+  }
 }
 
 /* ------------------------------
    اعمال فیلترها
 ------------------------------ */
 function applyFilters() {
-  const q = state.search.trim().toLowerCase();
+  const searchTerm = state.search.toLowerCase();
+  const dept = state.department;
 
   state.filtered = state.teachers.filter((t) => {
-    if (state.department !== "all" && t.department !== state.department) {
-      return false;
-    }
-
-    if (q) {
-      const inName = (t.name || "").toLowerCase().includes(q);
-      const inCourses = (t.courses || [])
-        .some((c) => String(c).toLowerCase().includes(q));
-      if (!inName && !inCourses) return false;
-    }
-
-    return true;
+    const matchSearch =
+      searchTerm === "" || t.name.toLowerCase().includes(searchTerm);
+    const matchDept = dept === "all" || t.department === dept;
+    return matchSearch && matchDept;
   });
 
   state.currentPage = 1;
   updateStats();
-  renderGrid();
+  renderTeachers();
   renderPagination();
 }
 
 /* ------------------------------
-   رندر گرید کارت‌ها
+   به‌روزرسانی آمار
 ------------------------------ */
-function renderGrid() {
-  els.grid.innerHTML = "";
+function updateStats() {
+  const total = state.filtered.length;
+  setText(els.teachersCount, toFa(total));
+
+  let filterLabel = "همه اساتید";
+  if (state.department !== "all") {
+    filterLabel = state.department;
+  }
+  if (state.search) {
+    filterLabel += ` · جستجو: "${state.search}"`;
+  }
+  setText(els.currentFilterLabel, filterLabel);
+}
+
+/* ------------------------------
+   رندر کارت‌های اساتید
+------------------------------ */
+function renderTeachers() {
   hideAllStates();
+  hide(els.pagination);
 
   if (state.filtered.length === 0) {
-    hide(els.pagination);
+    els.grid.innerHTML = "";
     show(els.emptyState);
     return;
   }
 
   const start = (state.currentPage - 1) * state.pageSize;
   const end = start + state.pageSize;
-  const pageItems = state.filtered.slice(start, end);
+  const page = state.filtered.slice(start, end);
 
-  const fragment = document.createDocumentFragment();
-  pageItems.forEach((teacher) => fragment.appendChild(buildCard(teacher)));
-  els.grid.appendChild(fragment);
+  els.grid.innerHTML = "";
+
+  page.forEach((teacher) => {
+    const clone = els.cardTemplate.content.cloneNode(true);
+
+    const card = clone.querySelector(".teacher-card");
+    card.dataset.teacherId = teacher.id;
+
+    setText(clone.querySelector(".teacher-card__name"), teacher.name);
+    setText(clone.querySelector(".teacher-card__department"), teacher.department);
+    setText(clone.querySelector(".teacher-card__rating-value"), formatScore(teacher.rating));
+
+    const difficultyBadge = clone.querySelector(".teacher-card__difficulty");
+    difficultyBadge.textContent = teacher.difficulty;
+    difficultyBadge.classList.add(
+      difficultyClass[teacher.difficulty] || "badge--success"
+    );
+
+    const attendanceBadge = clone.querySelector(".teacher-card__attendance");
+    attendanceBadge.textContent = teacher.attendance;
+    attendanceBadge.classList.add(
+      attendanceClass[teacher.attendance] || "badge--success"
+    );
+
+    setText(
+      clone.querySelector(".teacher-card__courses"),
+      teacher.courses.length > 0 ? `${toFa(teacher.courses.length)} درس` : "—"
+    );
+    setText(
+      clone.querySelector(".teacher-card__reviews"),
+      `${toFa(teacher.reviewsCount)} نظر`
+    );
+
+    els.grid.appendChild(clone);
+  });
+
+  show(els.pagination);
 }
 
 /* ------------------------------
-   ساخت یک کارت از روی template
------------------------------- */
-function buildCard(teacher) {
-  const node = els.cardTemplate.content.cloneNode(true);
-  const card = node.querySelector(".teacher-card");
-
-  setText(node.querySelector(".teacher-card__name"), teacher.name);
-  setText(node.querySelector(".teacher-card__department"), teacher.department);
-  setText(node.querySelector(".teacher-card__rating-value"), formatScore(teacher.rating));
-
-  // دروس (نمایش کوتاه‌شده)
-  const courses = teacher.courses || [];
-  const coursesText = courses.length
-    ? courses.slice(0, 3).join("، ") + (courses.length > 3 ? " ..." : "")
-    : "—";
-  setText(node.querySelector(".teacher-card__courses"), coursesText);
-
-  // تعداد نظرات
-   setText(node.querySelector(".teacher-card__reviews"), toFa(teacher.reviewsCount || 0));
-
-  // badge سختی
-  const diffEl = node.querySelector(".teacher-card__difficulty");
-  setText(diffEl, teacher.difficulty || "—");
-  if (diffEl && difficultyClass[teacher.difficulty]) {
-    diffEl.classList.add(difficultyClass[teacher.difficulty]);
-  }
-
-  // badge حضور و غیاب
-  const attEl = node.querySelector(".teacher-card__attendance");
-  setText(attEl, teacher.attendance || "—");
-  if (attEl && attendanceClass[teacher.attendance]) {
-    attEl.classList.add(attendanceClass[teacher.attendance]);
-  }
-
-  // دکمه جزئیات (هماهنگ با CSS)
-  const btn = node.querySelector(".teacher-card__button");
-  btn.addEventListener("click", () => openModal(teacher));
-
-  return card;
-}
-
-/* ------------------------------
-   صفحه‌بندی
+   رندر صفحه‌بندی
 ------------------------------ */
 function renderPagination() {
-  els.pagination.innerHTML = "";
+  const total = state.filtered.length;
+  const totalPages = Math.ceil(total / state.pageSize);
 
-  const totalPages = Math.ceil(state.filtered.length / state.pageSize);
   if (totalPages <= 1) {
     hide(els.pagination);
     return;
   }
-  show(els.pagination);
+
+  els.pagination.innerHTML = "";
 
   // دکمه قبلی
-  els.pagination.appendChild(
-    makePageBtn("‹", state.currentPage - 1, state.currentPage === 1)
-  );
+  const prevBtn = document.createElement("button");
+  prevBtn.textContent = "قبلی";
+  prevBtn.disabled = state.currentPage === 1;
+  prevBtn.addEventListener("click", () => {
+    if (state.currentPage > 1) {
+      state.currentPage--;
+      renderTeachers();
+      renderPagination();
+    }
+  });
+  els.pagination.appendChild(prevBtn);
 
   // شماره صفحات
-  for (let p = 1; p <= totalPages; p++) {
-    const btn = makePageBtn(toFa(p), p, false);
-    if (p === state.currentPage) {
-      btn.classList.add("is-active");
-      btn.setAttribute("aria-current", "page");
+  for (let i = 1; i <= totalPages; i++) {
+    const pageBtn = document.createElement("button");
+    if (i === state.currentPage) {
+      pageBtn.classList.add("is-active");
     }
-    els.pagination.appendChild(btn);
+    pageBtn.textContent = toFa(i);
+    pageBtn.addEventListener("click", () => {
+      state.currentPage = i;
+      renderTeachers();
+      renderPagination();
+    });
+    els.pagination.appendChild(pageBtn);
   }
 
   // دکمه بعدی
-  els.pagination.appendChild(
-    makePageBtn("›", state.currentPage + 1, state.currentPage === totalPages)
-  );
-}
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = "بعدی";
+  nextBtn.disabled = state.currentPage === totalPages;
+  nextBtn.addEventListener("click", () => {
+    if (state.currentPage < totalPages) {
+      state.currentPage++;
+      renderTeachers();
+      renderPagination();
+    }
+  });
+  els.pagination.appendChild(nextBtn);
 
-function makePageBtn(label, targetPage, disabled) {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "pagination__btn";
-  btn.textContent = label;
-  btn.disabled = disabled;
-
-  if (!disabled) {
-    btn.addEventListener("click", () => goToPage(targetPage));
-  }
-  return btn;
-}
-
-function goToPage(page) {
-  state.currentPage = page;
-  renderGrid();
-  renderPagination();
-
-  els.grid.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-/* ------------------------------
-   نوار آمار
------------------------------- */
-function updateStats() {
-  setText(els.teachersCount, toFa(state.filtered.length));
-  setText(
-    els.currentFilterLabel,
-    state.department === "all" ? "همه گروه‌ها" : state.department
-  );
+  show(els.pagination);
 }
 
 /* ------------------------------
-   مودال جزئیات
+   باز کردن مودال
 ------------------------------ */
-function openModal(teacher) {
+async function openModal(teacher) {
+  state.currentTeacher = teacher;
+
   setText(els.modalTeacherName, teacher.name);
-  setText(els.modalDepartment, teacher.department || "—");
-  setText(els.modalScore, `${formatScore(teacher.rating)} از ۵`);
-  setText(els.modalReviewCount, toFa(teacher.reviewsCount || 0));
-  setText(els.modalDescription, teacher.description || "توضیحی ثبت نشده است.");
+  setText(els.modalDepartment, teacher.department);
+  setText(els.modalScore, formatScore(teacher.rating));
+  setText(els.modalReviewCount, `${toFa(teacher.reviewsCount)} نظر`);
 
-  // لیست دروس
+  const descEl = els.modal.querySelector(".modal__description-text");
+  if (descEl) {
+    descEl.textContent = teacher.description || "توضیحی ثبت نشده است.";
+  }
+
+  // دروس
   els.modalCoursesList.innerHTML = "";
-  const courses = teacher.courses || [];
-  if (courses.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = "درسی ثبت نشده است.";
-    els.modalCoursesList.appendChild(li);
-  } else {
-    courses.forEach((c) => {
+  if (teacher.courses && teacher.courses.length > 0) {
+    teacher.courses.forEach((course) => {
       const li = document.createElement("li");
-      li.textContent = c;
+      li.textContent = course;
       els.modalCoursesList.appendChild(li);
     });
+  } else {
+    const li = document.createElement("li");
+    li.textContent = "بدون درس ثبت‌شده";
+    els.modalCoursesList.appendChild(li);
+  }
+
+  // بارگذاری امتیاز قبلی کاربر
+  state.existingUserRating = await loadUserRating(teacher.id);
+
+  if (state.existingUserRating) {
+    state.selectedRating = state.existingUserRating.score;
+    els.userComment.value = state.existingUserRating.comment || "";
+    highlightStars(state.selectedRating);
+  } else {
+    state.selectedRating = 0;
+    els.userComment.value = "";
+    highlightStars(0);
   }
 
   els.modal.classList.add("is-open");
-  document.body.style.overflow = "hidden";
-}
-
-function closeModal() {
-  els.modal.classList.remove("is-open");
-  document.body.style.overflow = "";
 }
 
 /* ------------------------------
-   اتصال رویدادها
+   بستن مودال
 ------------------------------ */
-function bindEvents() {
-  els.themeToggle?.addEventListener("click", toggleTheme);
+function closeModal() {
+  els.modal.classList.remove("is-open");
+  state.currentTeacher = null;
+  state.existingUserRating = null;
+  state.selectedRating = 0;
+  els.userComment.value = "";
+  highlightStars(0);
+}
 
-  els.searchInput?.addEventListener("input", (e) => {
-    state.search = e.target.value;
-    applyFilters();
-  });
+/* ------------------------------
+   اتصال event listenerها
+------------------------------ */
+function attachListeners() {
+  // تغییر تم
+  if (els.themeToggle) {
+    els.themeToggle.addEventListener("click", toggleTheme);
+  }
 
-  els.departmentFilter?.addEventListener("change", (e) => {
-    state.department = e.target.value;
-    applyFilters();
-  });
+  // جستجو
+  if (els.searchInput) {
+    els.searchInput.addEventListener("input", (e) => {
+      state.search = e.target.value.trim();
+      applyFilters();
+    });
+  }
 
-  els.pageSizeSelect?.addEventListener("change", (e) => {
-    state.pageSize = Number(e.target.value) || 9;
-    state.currentPage = 1;
-    renderGrid();
-    renderPagination();
-  });
+  // فیلتر گروه
+  if (els.departmentFilter) {
+    els.departmentFilter.addEventListener("change", (e) => {
+      state.department = e.target.value;
+      applyFilters();
+    });
+  }
 
-  // بستن مودال (کلیک روی Overlay یا دکمه ضربدر)
-  els.modal.addEventListener("click", (e) => {
-    if (e.target.hasAttribute("data-close")) {
-      closeModal();
-    }
-  });
+  // تعداد در صفحه
+  if (els.pageSizeSelect) {
+    els.pageSizeSelect.addEventListener("change", (e) => {
+      state.pageSize = parseInt(e.target.value, 10);
+      state.currentPage = 1;
+      renderTeachers();
+      renderPagination();
+    });
+  }
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && els.modal.classList.contains("is-open")) {
-      closeModal();
-    }
-  });
+  // بستن مودال
+  if (els.modal) {
+    els.modal.addEventListener("click", (e) => {
+      if (
+        e.target === els.modal ||
+        e.target.classList.contains("modal__close") ||
+        e.target.closest(".modal__close")
+      ) {
+        closeModal();
+      }
+    });
+  }
+
+  // ثبت امتیاز
+  if (els.submitRating) {
+    els.submitRating.addEventListener("click", submitRating);
+  }
+
+  // event delegation برای دکمه «مشاهده جزئیات»
+  if (els.grid) {
+    els.grid.addEventListener("click", (e) => {
+      const btn = e.target.closest(".teacher-card__button");
+      if (!btn) return;
+
+      const card = btn.closest(".teacher-card");
+      if (!card) return;
+
+      const id = parseInt(card.dataset.teacherId, 10);
+      const teacher = state.teachers.find((t) => t.id === id);
+      if (teacher) {
+        openModal(teacher);
+      }
+    });
+  }
 }
 
 /* ------------------------------
    راه‌اندازی
 ------------------------------ */
-function init() {
+async function init() {
   initTheme();
-  if (els.pageSizeSelect) {
-    state.pageSize = Number(els.pageSizeSelect.value) || 9;
-  }
-  bindEvents();
-  loadTeachers();
+  setupStarRating();
+  attachListeners();
+  await loadTeachers();
 }
 
+/* ------------------------------
+   اجرا
+------------------------------ */
 document.addEventListener("DOMContentLoaded", init);
